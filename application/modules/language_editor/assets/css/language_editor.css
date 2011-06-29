@@ -1,0 +1,170 @@
+body {
+ background-color: #fff;
+ margin: 40px;
+ font-family: Lucida Grande, Verdana, Sans-serif;
+ font-size: 11px;
+ color: #4F5155;
+}
+
+a {
+ color: #003399;
+ background-color: transparent;
+ font-weight: normal;
+}
+
+h1 {
+ color: #444;
+ background-color: transparent;
+ border-bottom: 1px solid #D0D0D0;
+ font-size: 16px;
+ font-weight: bold;
+ margin: 24px 0 2px 0;
+ padding: 5px 0 6px 0;
+}
+h2,h3,h4{
+ font-size: 12px;
+}
+hr{
+ border: 0;
+ background-color: #D0D0D0;
+ height: 1px;
+ width: 100%;
+ margin-top: 15px;
+}
+
+#content
+{
+	color:#4F5155;
+	font-size:12px;
+	margin:40px;
+}
+
+#content a
+{
+	background-color:transparent;
+	color:#039;
+	font-weight:400;
+}
+
+#content h1
+{
+	background-color:transparent;
+	color:#444;
+	font-size:16px;
+	font-weight:700;
+	margin:24px 0 2px;
+	padding:5px 0 6px;
+}
+
+#content code
+{
+	background-color:#f9f9f9;
+	border:1px solid #D0D0D0;
+	color:#002166;
+	display:block;
+	font-family:Monaco,Verdana,Sans-serif;
+	font-size:12px;
+	margin:14px 0;
+	padding:12px 10px;
+}
+
+#content table
+{
+	width:100%;
+}
+
+#content table tr.newfield td
+{
+	border-collapse:collapse;
+	border-spacing:20px;
+	clear:both;
+	vertical-align:top;
+}
+
+#content table td
+{
+	vertical-align:middle;
+}
+
+#content input
+{
+	width:100%;
+}
+
+#content table tr.newfield td input
+{
+	margin-bottom:20px;
+}
+
+#content table tr.newfield td a
+{
+	position:absolute;
+}
+
+#content .tiny
+{
+	font-size:10px;
+}
+
+#content .logout
+{
+	margin-top:50px;
+}
+
+#content h2
+{
+	font-size:14px;
+}
+
+#content .ok,#content .error
+{
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	background:#0071C3;
+	color:#fff;
+	padding:0 5px;
+	width:90%;
+}
+
+#content .error
+{
+	background:red;
+}
+
+#content a.remove
+{
+	border:#ccc 1px solid;
+	color:#ccc;
+	font-size:10px;
+	padding:0 2px;
+	text-decoration:none;
+}
+
+#content a.remove:hover
+{
+	background:#ff0;
+}
+
+#content a.newfile
+{
+	border:1px #ccc solid;
+	font-size:10px;
+	padding:2px 5px;
+	text-decoration:none;
+}
+
+#content input,#content textarea
+{
+	-moz-border-radius:5px;
+	border:1px #ccc solid;
+	color:#333;
+	font-size:12px;
+	padding:0 2px;
+	width:98%;
+}
+
+button.button_mid
+{
+	margin-right:20px;
+	margin-top:10px;
+}

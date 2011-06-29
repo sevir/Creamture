@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Welcome to Creamture</title>
+	<title>Creamture - HMVC sample</title>
 
 <style type="text/css">
 
@@ -42,7 +42,7 @@ h1 {
 </head>
 <body>
 <h1>This is the test_hmvc module. </h1>
-<?= Modules::run('test_hmvc/controller/widget_panel'); ?>
+<?php echo Modules::run('test_hmvc/controller/widget_panel'); ?>
 <p>All is working well. You can read this example in application/modules/test_hmvc</p>
 <p>With HMVC you can define:</p>
 <ul>

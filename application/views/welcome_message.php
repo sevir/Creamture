@@ -68,7 +68,7 @@ p.notify{
 }
 </style>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("h1.expandible").toggle(function(){
@@ -85,7 +85,7 @@ p.notify{
 
 <h1>Welcome to Creamture!</h1>
 <?php if($this->session->flashdata('htaccess')): ?>
-<p class="notify"><?=$this->session->flashdata('htaccess');?></p>
+<p class="notify"><?php echo $this->session->flashdata('htaccess');?></p>
 <?php endif ?>
 
 <p>Creamture is a framework based in CodeIgniter but with many additional features for enterprise works. The page you are looking at is being generated dynamically by Creamture.</p>
@@ -118,39 +118,41 @@ p.notify{
 <div>
 <p>
 <ul>
-	<li><a href="<?=auto_link($this->config->item('index_page').'/../welcome/simpleTester')?>">Run the tests</a></li>
-	<li><a href="<?=auto_link($this->config->item('index_page').'/../welcome/twigTest')?>">Try Twig template example</li></a>
-	<li><a href="<?=auto_link($this->config->item('index_page').'/../test_hmvc')?>">Test HMVC Module</li></a>
+	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../welcome/simpleTester')?>">Run the tests</a></li>
+	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../welcome/twigTest')?>">Try Twig template example</li></a>
+	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../test_hmvc')?>">Test HMVC Module</li></a>
 </ul>
 </p>
 </div>
 <h1 class="expandible"><span>+</span> Your system:</h1>
 <div>
 <ul>
-	<li>Support for short open tags < ?=$var; ? > in your templates: <?=($config['short_open_tag']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
-	<li>Support for mod_rewrite (hide your index.php): <?=($config['mod_rewrite']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
-	<li>Support for mod_deflate (apache web compression): <?=($config['mod_deflate']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
-	<li>Support for PHP ZLib (PHP compression): <?=($config['zlib_enabled']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
-	<li>ZLib Compression enabled: <?=($config['zlib_compression_enabled']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
+	<li>Support for short open tags < ?=$var; ? > in your templates: <?php echo($config['short_open_tag']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
+	<li>Support for mod_rewrite (hide your index.php): <?php echo ($config['mod_rewrite']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
+	<li>Support for mod_deflate (apache web compression): <?php echo ($config['mod_deflate']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
+	<li>Support for PHP ZLib (PHP compression): <?php echo ($config['zlib_enabled']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
+	<li>ZLib Compression enabled: <?php echo ($config['zlib_compression_enabled']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
 </ul>
 </div>
 
 <h1 class="expandible"><span>+</span> Hide your index.php with .htaccess</h1>
 <div>
 <p>Save this code as .htaccess in the public folder. You need mod_rewrite module active in apache. You feel free to modify it and save then.</p>
-<?=form_open('welcome/saveHtaccess');?>
+<?php echo form_open('welcome/saveHtaccess');?>
 <textarea name="htaccess" class="htaccess">
 <IfModule mod_rewrite.c>
 RewriteEngine on
 RewriteRule .* - [E=HTTP_IF_MODIFIED_SINCE:%{HTTP:If-Modified-Since}]
 RewriteRule .* - [E=HTTP_IF_NONE_MATCH:%{HTTP:If-None-Match}]
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-RewriteCond %{REQUEST_URI} !.*\.(png|jpg|gif|jpeg)
 RewriteCond $1 !^(favicon\.ico|index\.php|js|css|imgs)
 RewriteRule ^(.*)$ /index.php?/$1 [L]
 </IfModule>
 </textarea>
 <button type="submit">Save this .htaccess automatically</button>
+</form>
+<?php echo form_open('welcome/removeHtaccess');?>
+<button type="submit" name="remove">Remove .htaccess</button>
 </form>
 </div>
 

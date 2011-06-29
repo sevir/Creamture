@@ -84,6 +84,32 @@ class Welcome extends CI_Controller {
 		redirect('welcome/index');
 	}
 
+	public function removeHtaccess(){
+		$this->load->helper(array('file','url'));
+
+		$m = '';
+
+		if(unlink('.htaccess')){
+			$m .= 'File .htaccess removed successfully, trying to change config.php';
+
+			$c = read_file(APPPATH.'config/config.php');
+			$c = str_replace('$config[\'index_page\'] = \'\';', '$config[\'index_page\'] = \'index.php\';', $c);
+
+			if (write_file(APPPATH.'config/config.php', $c)){
+				$m .= '<br />Config file changed changed in $config["index_page"] ';
+			}else{
+				$m .= '<br />Error changing config file';
+			}
+		}else{
+			$m .= 'Error removing .htaccess please check de file and the public folder permissions';
+		}
+
+		$this->session->set_flashdata('htaccess',$m);
+
+
+		redirect('index.php/welcome/index');
+	}
+
 	private function _getConfig(){
 		$result = array();
 
