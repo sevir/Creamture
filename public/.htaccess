@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteRule .* - [E=HTTP_IF_MODIFIED_SINCE:%{HTTP:If-Modified-Since}]
+RewriteRule .* - [E=HTTP_IF_NONE_MATCH:%{HTTP:If-None-Match}]
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteCond %{REQUEST_URI} !.*\.(png|jpg|gif|jpeg)
+RewriteCond $1 !^(favicon\.ico|index\.php|js|css|imgs)
+RewriteRule ^(.*)$ /index.php?/$1 [L]
+</IfModule>
