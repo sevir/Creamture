@@ -106,11 +106,27 @@ p.notify{
 	<li><a href="http://simpletest.org/">SimpleTest</a> Unit testing library</li>
 	<li><a href="http://getsparks.org/">Sparks</a> The package manager &amp; repository</li>
 	<li><a href="https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home">HMVC</a></li>
-	<li>Multilanguage web editor</li>
-	<li>Session in db improvements</li>
+	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../../language_editor')?>">Multilanguage web editor</a> as module. Try with user: editor and pass: 3d1t0rp4ssw0rd
+	<ul>
+		<li>Edit online the language files, no more problems with UTF-8, html entities, etc...</li>
+		<li>WYSIWYG editor</li>
+		<li>Google Translator helper</li>
+		<li>Create all languages file at the same time</li>
+		<li>No broked code editing thousand lines</li>
+	</ul>
+	</li>
+	<!-- <li>Session in db improvements</li>
 	<li>Get params improvements, better support for $this->input->get_post()</li>
 	<!-- <li>Phing - Ant for PHP - <span class="red">(not available yet)</span></li> -->
-	<li><a href="http://nanoweb.si.kz/">Nanoweb</a> In build Web server <span class="red">(not available yet)</span></li>
+	<li>Command line CRUD
+		<ul>
+			<li>Create new controllers, helpers, libraries, simply and fast, better than copy&amp;paste ;-)</li>
+			<li>Customize the templates</li>
+			<li>Create new commands</li>
+		</ul>
+	</li>
+	<li><a href="http://nanoweb.si.kz/">Nanoweb</a> In built Web server <span class="red">(not available yet)</span></li>
+	<li>MultiOS Desktop Application for easy installation. <span class="red">(not available yet)</span></li>
 </ul>
 </p>
 </div>
