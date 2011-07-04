@@ -31,10 +31,10 @@ class Creamator extends MX_Controller {
 			println('usage: '.@$command_info['usage']);
 			if( is_array(@$command_info['parameters']) ){
 				foreach($command_info['parameters'] as $p){
-					println($p);
+					println('    '.$p);
 				}
 			}else{
-				println(@$command_info['parameters']);
+				println('    '.@$command_info['parameters']);
 			}
 			println('');
 		}else{
@@ -65,9 +65,9 @@ class Creamator extends MX_Controller {
 			$command_info = $this->_getInfoFunc($command);
 
 			if ($command_info){
-				if (!isset($command_info['num_parameters']) || $command_info['num_parameters'] < count($params)){
+				if (!isset($command_info['num_parameters']) || $command_info['num_parameters'] > count($params)){
 					//shows helps
-					$this->help('$command');
+					$this->help($command);
 				}else{
 					//Run the command
 					call_user_func_array($command, $params);
@@ -98,6 +98,10 @@ class Creamator extends MX_Controller {
 
 	private function _loadCommands(){
 		//Load helpers
+		if (count($this->commands) > 0) return false;
+
+		$cremator = array();
+
 		$this->load->helper('directory');
 		$this->load->helper('file');
 		$this->load->config('creamator_config');

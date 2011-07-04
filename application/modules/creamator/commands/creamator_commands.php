@@ -5,49 +5,49 @@ $creamator['basicCommands'] = array(
 	'createController' => array(
 		'description'=>'Create new controller',
 		'usage' => 'creamator createController <name_of_the_controller>',
-		'parameters' => 'name_of_controller',
+		'parameters' => 'name_of_controller must be a string without spaces',
 		'num_parameters' => 1
 	),
 	'createModel' => array(
 		'description'=>'Create new model',
 		'usage' => 'creamator createModel <name_of_the_model>',
-		'parameters' => 'name_of_the_model',
+		'parameters' => 'name_of_the_model must be a string without spaces',
 		'num_parameters' => 1
 	),
 	'createLibray' => array(
 		'description'=>'Create new Library',
 		'usage' => 'creamator createLibrary <name_of_the_library>',
-		'parameters' => 'name_of_the_library',
+		'parameters' => 'name_of_the_library must be a string without spaces',
 		'num_parameters' => 1
 	),
 	'createHelper' => array(
 		'description'=>'Create new Helper',
 		'usage' => 'creamator createHelper <name_of_the_helper>',
-		'parameters' => 'name_of_the_helper',
+		'parameters' => 'name_of_the_helper must be a string without spaces',
 		'num_parameters' => 1
 	),
 	'createModule' => array(
 		'description'=>'Create new Module Scaffolding',
 		'usage' => 'creamator createModule',
-		'parameters' => 'name_of_the_module',
+		'parameters' => 'name_of_the_module must be a string without spaces',
 		'num_parameters' => 1
 	),
 	'createModuleController' => array(
 		'description'=>'Create new controller in a module',
 		'usage' => 'creamator createModuleController <name_of_the_module> <name_of_the_controller>',
-		'parameters' => array('name_of_the_module','name_of_the_controller'),
+		'parameters' => array('name_of_the_module must be a string without spaces','name_of_the_controller must be a string without spaces'),
 		'num_parameters' => 2
 	),
 	'createModuleLibrary' => array(
 		'description'=>'Create new library in a module',
 		'usage' => 'creamator createModuleLibrary <name_of_the_module> <name_of_the_controller>',
-		'parameters' => array('name_of_the_module','name_of_the_controller'),
+		'parameters' => array('name_of_the_module must be a string without spaces','name_of_the_controller must be a string without spaces'),
 		'num_parameters' => 2
 	),
 	'createModuleHelper' => array(
 		'description'=>'Create new helper in a module',
 		'usage' => 'creamator createModuleHelper <name_of_the_module> <name_of_the_controller>',
-		'parameters' => array('name_of_the_module','name_of_the_controller'),
+		'parameters' => array('name_of_the_module must be a string without spaces','name_of_the_controller must be a string without spaces'),
 		'num_parameters' => 2
 	)
 );
