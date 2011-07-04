@@ -66,6 +66,9 @@ p.notify{
 .expandible{
 	cursor: pointer;
 }
+table.checks{
+	font-size: 11px;
+}
 </style>
 
 <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
@@ -118,14 +121,15 @@ p.notify{
 	<!-- <li>Session in db improvements</li>
 	<li>Get params improvements, better support for $this->input->get_post()</li>
 	<!-- <li>Phing - Ant for PHP - <span class="red">(not available yet)</span></li> -->
-	<li>Command line CRUD
+	<li>Creamator: Command line CRUD
 		<ul>
 			<li>Create new controllers, helpers, libraries, simply and fast, better than copy&amp;paste ;-)</li>
 			<li>Customize the templates</li>
 			<li>Create new commands</li>
+			<li>Try the power of the command line typing: <code>php index.php creamator</code></li>
 		</ul>
 	</li>
-	<li><a href="http://nanoweb.si.kz/">Nanoweb</a> In built Web server <span class="red">(not available yet)</span></li>
+	<!--<li><a href="http://nanoweb.si.kz/">Nanoweb</a> In built Web server <span class="red">(not available yet)</span></li>-->
 	<li>MultiOS Desktop Application for easy installation. <span class="red">(not available yet)</span></li>
 </ul>
 </p>
@@ -140,15 +144,31 @@ p.notify{
 </ul>
 </p>
 </div>
-<h1 class="expandible"><span>+</span> Your system:</h1>
+<h1 class="expandible"><span>+</span> Your system</h1>
 <div>
-<ul>
-	<li>Support for short open tags < ?=$var; ? > in your templates: <?php echo($config['short_open_tag']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
-	<li>Support for mod_rewrite (hide your index.php): <?php echo ($config['mod_rewrite']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
-	<li>Support for mod_deflate (apache web compression): <?php echo ($config['mod_deflate']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
-	<li>Support for PHP ZLib (PHP compression): <?php echo ($config['zlib_enabled']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
-	<li>ZLib Compression enabled: <?php echo ($config['zlib_compression_enabled']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></li>
-</ul>
+	<table class="checks">
+		<tr>
+			<td>Write permissions for cache folder (0775 or 0777)</td><td><?php echo ($config['cache_write_permissions'] == '0775' || $config['cache_write_permissions'] == '0777')?'<span class="green">'.$config['cache_write_permissions'].'</span>':'<span class="red">'.$config['cache_write_permissions'].'</span>'; ?></td>
+		</tr>
+		<tr>
+			<td>Write permissions for logs folder (0775 or 0777)</td><td><?php echo ($config['log_write_permissions'] == '0775' || $config['log_write_permissions'] == '0777')?'<span class="green">'.$config['log_write_permissions'].'</span>':'<span class="red">'.$config['log_write_permissions'].'</span>'; ?></td>
+		</tr>
+		<tr>
+			<td>Support for short open tags < ?=$var; ? > in your templates:</td><td><?php echo($config['short_open_tag']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></td>
+		</tr>
+		<tr>
+			<td>Support for mod_rewrite (hide your index.php):</td><td><?php echo ($config['mod_rewrite']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></td>
+		</tr>
+		<tr>
+			<td>Support for mod_deflate (apache web compression):</td><td><?php echo ($config['mod_deflate']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></td>
+		</tr>
+		<tr>
+			<td>Support for PHP ZLib (PHP compression):</td><td><?php echo ($config['zlib_enabled']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></td>
+		</tr>
+		<tr>
+			<td>ZLib Compression enabled:</td><td><?php echo ($config['zlib_compression_enabled']?'<span class="green">OK</span>':'<span class="red">NO</span>')?></td>
+		</tr>
+	</table>
 </div>
 
 <h1 class="expandible"><span>+</span> Hide your index.php with .htaccess</h1>

@@ -28,6 +28,9 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->helper(array('form','url'));
 
+		if( strpos($_SERVER['REQUEST_URI'] , 'welcome') === FALSE){
+			redirect('/welcome/');
+		}
 
 		$this->load->view('welcome_message', array('config'=>$this->_getConfig() ) );
 	}
@@ -40,7 +43,11 @@ class Welcome extends CI_Controller {
 		$this->load->view('welcome_message', array('config'=>$this->_getConfig() ) );
 	}
 
-	function twigTest(){
+	public function info(){
+		phpinfo();
+	}
+
+	public function twigTest(){
 		$this->load->add_package_path(APPPATH.'third_party/twig/');
 
 		$this->load->library('twig', array('debug'=>true, 'template_dir'=>APPPATH.'third_party/twig/views'));
@@ -118,8 +125,15 @@ class Welcome extends CI_Controller {
 		$result['mod_deflate'] = $this->_detectApacheModule('mod_deflate');
 		$result['zlib_enabled'] = function_exists('gzopen');
 		$result['zlib_compression_enabled'] = ini_get('zlib_output_compression');
+		$result['log_write_permissions'] = $this->_get_perms(APPPATH.'logs');
+		$result['cache_write_permissions'] = $this->_get_perms(APPPATH.'cache');
 
 		return $result;
+	}
+
+	private function _get_perms($path){
+		clearstatcache();
+		return substr(sprintf('%o', fileperms($path)), -4);
 	}
 
 	private function _detectApacheModule($name){
