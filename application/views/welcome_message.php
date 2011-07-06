@@ -109,7 +109,7 @@ table.checks{
 	<li><a href="http://simpletest.org/">SimpleTest</a> Unit testing library</li>
 	<li><a href="http://getsparks.org/">Sparks</a> The package manager &amp; repository</li>
 	<li><a href="https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home">HMVC</a></li>
-	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../../language_editor')?>">Multilanguage web editor</a> as module. Try with user: editor and pass: 3d1t0rp4ssw0rd
+	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../language_editor')?>">Multilanguage web editor</a> as module. Try with user: editor and pass: 3d1t0rp4ssw0rd
 	<ul>
 		<li>Edit online the language files, no more problems with UTF-8, html entities, etc...</li>
 		<li>WYSIWYG editor</li>

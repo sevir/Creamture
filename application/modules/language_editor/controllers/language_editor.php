@@ -126,7 +126,7 @@ class Language_editor extends CI_Controller
 			{
 				$html .= '<h2>List of languages</h2>';
 				if($this->session->userdata('i18n_admin')){
-					$html .= '<p><a class="newfile" href="'.site_url('language_editor/new_file').'">New language file</a></p>';
+					$html .= '<p><a class="newfile" href="'.auto_link($this->config->item('index_page')).'/../language_editor/new_file'.'">New language file</a></p>';
 				}
 				$html	.= $this->i18n_manager->get_list_languages();
 			}
