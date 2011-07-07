@@ -4,7 +4,7 @@
 	<div class="inside">
 		<div class="container_12">
 			<h2>Please login as translator</h2>
-			<form action="<?php echo auto_link($this->config->item('index_page')."/../language_editor/login");?>" method="post">
+			<form action="<?php echo getRelativePath('/language_editor/login');?>" method="post">
 				<table>
 					<tr>
 						<td>User:</td>

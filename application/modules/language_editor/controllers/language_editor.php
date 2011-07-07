@@ -18,17 +18,17 @@ class Language_editor extends CI_Controller
 		parent::__construct();
 
 		$this->load->library(array('session','i18n_manager'));
-		$this->load->helper('url');
+		$this->load->helper(array('url','i18n'));
 
 		$this->scripts = array(
-			auto_link($this->config->item('index_page').'/../language_editor/assets/js/jquery-1.6.1.min.js'),
-			auto_link($this->config->item('index_page').'/../language_editor/assets/ckeditor/ckeditor.js'),
-			auto_link($this->config->item('index_page').'/../language_editor/assets/ckeditor/adapters/jquery.js'),
+			getRelativePath('/language_editor/assets/js/jquery-1.6.1.min.js'),
+			getRelativePath('/language_editor/assets/ckeditor/ckeditor.js'),
+			getRelativePath('/language_editor/assets/ckeditor/adapters/jquery.js'),
 			'http://www.google.com/jsapi',
-			auto_link($this->config->item('index_page').'/../language_editor/assets/js/editor.js'),
+			getRelativePath('/language_editor/assets/js/editor.js'),
 		);
 		$this->styles = array(
-			auto_link($this->config->item('index_page').'/../language_editor/assets/css/language_editor.css'),
+			getRelativePath('/language_editor/assets/css/language_editor.css'),
 		);
 	}
 
@@ -126,7 +126,7 @@ class Language_editor extends CI_Controller
 			{
 				$html .= '<h2>List of languages</h2>';
 				if($this->session->userdata('i18n_admin')){
-					$html .= '<p><a class="newfile" href="'.auto_link($this->config->item('index_page')).'/../language_editor/new_file'.'">New language file</a></p>';
+					$html .= '<p><a class="newfile" href="'.getRelativePath('/language_editor/new_file').'">New language file</a></p>';
 				}
 				$html	.= $this->i18n_manager->get_list_languages();
 			}
