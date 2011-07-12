@@ -17,3 +17,7 @@ function creamator_tpl($rpl = array(), $tpl_str=''){
 	}
 	return $tpl_str;
 }
+
+function is_win(){
+	return (strtoupper (substr(PHP_OS, 0,3)) == 'WIN');
+}

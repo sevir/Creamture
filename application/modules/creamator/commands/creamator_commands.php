@@ -49,6 +49,18 @@ $creamator['basicCommands'] = array(
 		'usage' => 'creamator createModuleHelper <name_of_the_module> <name_of_the_controller>',
 		'parameters' => array('name_of_the_module must be a string without spaces','name_of_the_controller must be a string without spaces'),
 		'num_parameters' => 2
+	),
+	'enableHost' => array(
+		'description'=>'Enable new host in hosts file DNS resolution',
+		'usage' => 'creamator enableHost <name_of_the_host> <ip_of_the_host>',
+		'parameters' => array('name_of_the_host is mandatory, like my.host.com','ip_of_the_host is optional, by default is localhost 127.0.0.1'),
+		'num_parameters' => 1
+	),
+	'disableHost' => array(
+		'description'=>'Remove host in hosts file DNS resolution',
+		'usage' => 'creamator disableHost <name_of_the_host>',
+		'parameters' => array('name_of_the_host is mandatory, like my.host.com'),
+		'num_parameters' => 1
 	)
 );
 
@@ -203,5 +215,36 @@ function createModuleHelper($module, $name){
 	createHelper($name, $module);
 }
 
+function enableHost($name, $ip='127.0.0.1'){
+	if(!preg_match('/(\w+)\.?(\w+)/',$name) || !preg_match('/^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$/',$ip)){
+		println('Please check the name of ip syntax');
+		return false;
+	}
 
+	if(is_win()){
+		$win_path = (is_dir('/windows'))?'/windows':'/winnt';
 
+		$host_path = $win_path.'/system32/drivers/etc/hosts';
+	}else{
+		$host_path = '/etc/hosts';
+	}
+
+	$host_file = read_file($host_path);
+
+	if (strpos($host_file, $name)){
+		$host_file = preg_replace('/'.'\s*'.'([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])'.'\s+'.str_replace('.','\.',$name).'\s*$/', "\n".$ip.' '.$name."\n", $host_file );
+
+	}else{
+		$host_file .= "\n".$ip." ".$name."\n";
+	}
+
+	println($host_file);
+}
+
+function disableHost($name){
+	if(is_win()){
+
+	}else{
+
+	}
+}
