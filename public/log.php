@@ -4,9 +4,7 @@
  */
 
 	$allow_ips = array(
-		'127.0.0.1',
-		'84.124.50.22',
-		'84.124.50.23'
+		'127.0.0.1'
 	);
 	if (!in_array($_SERVER['REMOTE_ADDR'], $allow_ips)) die('Ip not allowed');
 
