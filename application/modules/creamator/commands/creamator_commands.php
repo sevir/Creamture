@@ -238,13 +238,30 @@ function enableHost($name, $ip='127.0.0.1'){
 		$host_file .= "\n".$ip." ".$name."\n";
 	}
 
-	println($host_file);
+	write_file($host_path,$host_file);
+
+	println('Host '.$name.' enabled in hosts file successfully!');
 }
 
 function disableHost($name){
-	if(is_win()){
-
-	}else{
-
+	if(!preg_match('/(\w+)\.?(\w+)/',$name) ){
+		println('Please check the name syntax');
+		return false;
 	}
+
+	if(is_win()){
+		$win_path = (is_dir('/windows'))?'/windows':'/winnt';
+
+		$host_path = $win_path.'/system32/drivers/etc/hosts';
+	}else{
+		$host_path = '/etc/hosts';
+	}
+
+	$host_file = read_file($host_path);
+
+	$host_file = preg_replace('/\s+[0-9,\.]+\s+'.str_replace('.', '\.', $name).'/', '', $host_file);
+
+	write_file($host_path, $host_file);
+
+	println('Host '.$name.' removed in hosts file successfully!');
 }
