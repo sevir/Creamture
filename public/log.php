@@ -1,12 +1,13 @@
 <?php
 /**
- * LOG utility by SeViR
+ * LOG utility
+ * SeViR
  */
 
 	$allow_ips = array(
 		'127.0.0.1'
 	);
-	if (!in_array($_SERVER['REMOTE_ADDR'], $allow_ips)) die('Ip not allowed');
+	if (!in_array($_SERVER['REMOTE_ADDR'], $allow_ips)) die('Your IP ('.$_SERVER['REMOTE_ADDR'].') is not allowed');
 
 	$cache_paths = array();
 	if (file_exists(dirname( __FILE__).'/system/logs/')){
@@ -15,20 +16,44 @@
 		define('LOG_PATH',dirname( __FILE__).'/../application/logs/');
 	}
 
-
+	$error_icon = 'data:image/gif;base64,R0lGODlhEAAQAPQfAOaQhNFiTfrUzPrq5vWEZ/KnmfN9YedxW+3FvPCXhOmJe8NPNuySheKmmctZQ/ePd+uBa/i0ovOypvSupO94Xviiifq8qPrAs+NgVN19b96hle+fkuuvov///+doWQAAACH5BAUAAB8ALAAAAAAQABAAQAWV4CeOZClSkUGtQue9XuGIw5NYBNF1hmEph8EIEVBMFC9FIbNAlAQPSCESKUAgAtKjUOkZdqsDI3EQSQ6Rw2uHaRcCjdKgEVgsHBqh6TO4PHIPF3okAgQ3FTkVFgwHWSIXEDgEXx0rKAccJxGTKzsHagcyIhAbCRSfGxMvGAoAATQHRi8MDG4ZDoMfRAEAGxuuTXvCJCEAOw%3D%3D';
+	$debug_icon = 'data:image/gif;base64,R0lGODlhEAAPAMQfAP3shv/12vvcS+vCc/vgXt6yPOvFeuuiJ+uaFOvLivraQuvJhfzhY+upN+ueHPvdUuvAbvzfWvveVv70zuu+aeu3Wbx8EuuwR/3vof7xsv3umP7yv/ziZv/24////////yH5BAEAAB8ALAAAAAAQAA8AAAVz4CeOn+eRKOklyZmqSdct7ustHcd1Ro16htyO4hsBhRxGoFIsDXIFC2NyKXqeuighsmn4PJAcIxqRZA61q5ixlTwEGLQI3GGwo2+BxnE62tt5CgoAfEABARMTGxkZGBoAkHwlFBUXDQcOCJqbaSaenyYiIQA7';
+	$info_icon = 'data:image/gif;base64,R0lGODlhEAAQAPU/AD5xtKvE4Xqlx6bC3YWr0+Tr9LvL4mmVwz1XkZ282klhlI2qzZC00muYxVJronKdzGih1P7//1uc06K+3LLJ5ZuqyF2Esr3T6NDc6kaKxXahz3mk0maQvk2Rz1R7rZ674JKz2uPo78bd8vT3++bw+Up3tL3G2Yyy2fX4+5i001uKuVKQxZO41Juu0pe62GKKuWiTwWKXyH2p1tTg7miczTxco6HG5KTJ56jM6khmo3KWvnidxDyDwaC/4F6Rv////yH5BAUAAD8ALAAAAAAQABAAQAavwJ9wSCwKeRRNo3GYjThQWAAhJElOFNkmENBsJoRSYWioCRK7l0WXEiBMRZEE0uN+YpkLUfIBaR4PExNLDQQuDkIJPgEHMAYRERgWFikeFUUhFQ4ICA4VIUZVOBAdHRI2JEYiHScGHwQEIAEEAHpCNzQUGxoaIyiAGgMqLUIZug9LkI0wDQE1QisJBEwwTi/XOyyIPwUlBBMcLyqTFgsCCqBkORYsAwMMHgpwofRDQQA7';
 
    if(isset($_GET['f'])){
     	if(strpos($_GET['f'], './') !== FALSE) die('invalid access');
 
     	if (file_exists(LOG_PATH.$_GET['f'])){
- 			echo file_get_contents(LOG_PATH.$_GET['f']);
+ 			echo '<pre>'.str_replace(
+ 				array(
+ 					'ERROR -',
+ 					'INFO -',
+ 					'DEBUG -'
+				),
+ 				array(
+ 					'</pre><pre class="error"><img alt="error" src="'.$error_icon.'" />',
+ 					'</pre><pre class="info"><img alt="info" src="'.$info_icon.'" />',
+ 					'</pre><pre class="debug"><img alt="debug" src="'.$debug_icon.'" />',
+				),file_get_contents(LOG_PATH.$_GET['f'])
+				).'</pre>';
     	}
     }
     else if (isset($_GET['log']))
     {
         if (file_exists(LOG_PATH.'log-'.date('Y-m-d').'.php'))
         {
-            echo file_get_contents(LOG_PATH.'log-'.date('Y-m-d').'.php');
+            echo '<pre>'.str_replace(
+ 				array(
+ 					'ERROR -',
+ 					'INFO -',
+ 					'DEBUG -'
+				),
+ 				array(
+ 					'</pre><pre class="error"><img alt="error" src="'.$error_icon.'" />',
+ 					'</pre><pre class="info"><img alt="info" src="'.$info_icon.'" />',
+ 					'</pre><pre class="debug"><img alt="debug" src="'.$debug_icon.'" />',
+				),file_get_contents(LOG_PATH.'log-'.date('Y-m-d').'.php')
+				).'</pre>';
 
             if (isset($_GET['r']) && $_GET['r']=='1')
             {
@@ -264,8 +289,18 @@ li.active{
 pre{
 	font-family: arial,sans-serif;;
 	font-size: 12px;
-	color: #C11;
+	color: #515151;
 	padding-left: 10px;
+	margin: 0;
+}
+pre.error{
+	color: #C11;
+}
+pre.debug{
+	color: #1C2310;
+}
+pre.info{
+	color: #001D52;
 }
 #log_panel{
 	float: left;
