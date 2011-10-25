@@ -14,7 +14,7 @@ $creamator['basicCommands'] = array(
 		'parameters' => 'name_of_the_model must be a string without spaces',
 		'num_parameters' => 1
 	),
-	'createLibray' => array(
+	'createLibrary' => array(
 		'description'=>'Create new Library',
 		'usage' => 'creamator createLibrary <name_of_the_library>',
 		'parameters' => 'name_of_the_library must be a string without spaces',
