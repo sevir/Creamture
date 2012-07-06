@@ -33,11 +33,28 @@ class Spark_utils {
         self::$buffer = true;
     }
 
+    static function full_move($src, $dst)
+    {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while(false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src . '/' . $file)) {
+                    self::full_move($src . '/' . $file,$dst . '/' . $file);
+                }
+                else {
+                    rename($src . '/' . $file,$dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+
     static function remove_full_directory($dir, $vocally = false)
     {
         if (is_dir($dir))
         {
-            $objects = scandir($dir); 
+            $objects = scandir($dir);
             foreach ($objects as $object)
             {
                 if ($object != '.' && $object != '..')
@@ -49,14 +66,14 @@ class Spark_utils {
                     else
                     {
                         if ($vocally) self::notice("Removing $dir/$object");
-                        unlink($dir . '/' . $object); 
+                        unlink($dir . '/' . $object);
                     }
-                } 
-            } 
-            reset($objects); 
-            return rmdir($dir); 
-        } 
-    } 
+                }
+            }
+            reset($objects);
+            return rmdir($dir);
+        }
+    }
 
     static function notice($msg)
     {

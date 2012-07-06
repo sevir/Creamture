@@ -19,7 +19,7 @@ class Spark_type {
         {
             if (!property_exists($this, $k)) $this->$k = $v;
         }
-       
+
         // used internally
         $this->temp_token = 'spark-' . $this->spark_id . '-' . time();
         $this->temp_path = sys_get_temp_dir() . '/' . $this->temp_token;
@@ -45,10 +45,44 @@ class Spark_type {
 
         @mkdir(SPARK_PATH); // Two steps for windows
         @mkdir(SPARK_PATH . "/$this->name");
-        $success = @rename($this->temp_path, $this->installation_path);
-        if ($success)
-        {
-            $this->installed_path = $this->installation_path;
+        Spark_utils::full_move($this->temp_path, $this->installation_path);
+        Spark_utils::remove_full_directory($this->temp_path);
+        $this->installed_path = $this->installation_path;
+    }
+
+    private function recurseMove($src,$dst)
+    {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while(false !== ( $file = readdir($dir)) ) {
+            if (( $file != '.' ) && ( $file != '..' )) {
+                if ( is_dir($src . '/' . $file) ) {
+                    $this->recurseMove($src . '/' . $file,$dst . '/' . $file);
+                }
+                else {
+                    rename($src . '/' . $file,$dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+
+    private function rrmdir($dir)
+    {
+        if (is_dir($dir)) {
+            $files = scandir($dir);
+            foreach ($files as $file) {
+                if ($file != "." && $file != "..") {
+                    if (is_dir($dir . "/" . $file)) {
+                        $this->rrmdir($dir . "/" . $file);
+                    }
+                    else {
+                        unlink($dir . "/" . $file);
+                    }
+                }
+            }
+            reset($files);
+            rmdir($dir);
         }
     }
 
@@ -69,7 +103,7 @@ class Spark_type {
             Spark_utils::warning("Dependency $spark->name is already installed.");
         }
     }
-    
+
     function verify($break_on_already_installed = true)
     {
         // see if this is deactivated
