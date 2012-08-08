@@ -42,8 +42,37 @@ class Twig
                 'cache' => $this->_cache_dir,
                 'debug' => $debug,
 		));
+		$this->_twig->addExtension(new Twig_Extensions_Extension_I18n());
+
+		//Metemos el soporte de la librería assets en Twig
+		$this->CI->load->spark('assets/1.5.0');
+		$this->add_function('array'); //php function
+		$this->add_function('assets_css');		
+		$this->add_function('assets_js');
+		$this->add_function('assets_css_group');		
+		$this->add_function('assets_js_group');
 	}
 
+	public function generate_gettext($tmpDir){
+		$tplDir = $this->_template_dir;
+		$loader = new Twig_Loader_Filesystem($tplDir);
+
+		// force auto-reload to always have the latest version of the template
+		$twig = new Twig_Environment($loader, array(
+		    'cache' => $tmpDir,
+		    'auto_reload' => true
+		));
+		$twig->addExtension(new Twig_Extensions_Extension_I18n());
+		// configure Twig the way you want
+
+		// iterate over all your templates
+		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tplDir), RecursiveIteratorIterator::LEAVES_ONLY) as $file)
+		{
+		  // force compilation
+		  $twig->loadTemplate(str_replace($tplDir.'/', '', $file));
+		}
+	}
+	
 	public function add_function($name)
 	{
 		$this->_twig->addFunction($name, new Twig_Function_Function($name));

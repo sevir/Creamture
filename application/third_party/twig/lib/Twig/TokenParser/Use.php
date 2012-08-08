@@ -8,6 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+/**
+ * Imports blocks defined in another template into the current template.
+ *
+ * <pre>
+ * {% extends "base.html" %}
+ *
+ * {% use "blocks.html" %}
+ *
+ * {% block title %}{% endblock %}
+ * {% block content %}{% endblock %}
+ * </pre>
+ *
+ * @see http://www.twig-project.org/doc/templates.html#horizontal-reuse for details.
+ */
 class Twig_TokenParser_Use extends Twig_TokenParser
 {
     /**
@@ -61,7 +76,7 @@ class Twig_TokenParser_Use extends Twig_TokenParser
     /**
      * Gets the tag name associated with this token parser.
      *
-     * @param string The tag name
+     * @return string The tag name
      */
     public function getTag()
     {
