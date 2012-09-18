@@ -76,6 +76,13 @@ if (defined('ENVIRONMENT'))
 
 /*
  *---------------------------------------------------------------
+ * PUBLIC FOLDER NAME
+ *---------------------------------------------------------------
+ */
+	$public_folder = '../public';
+
+/*
+ *---------------------------------------------------------------
  * VIEW FOLDER NAME
  *---------------------------------------------------------------
  *
@@ -203,6 +210,14 @@ if (defined('ENVIRONMENT'))
 		}
 
 		define('APPPATH', BASEPATH.$application_folder.'/');
+	}
+
+	// The path to the "public" folder
+	if (is_dir($public_folder))
+	{
+		define('PUBLICPATH', $public_folder.'/');
+	}else{
+		exit("Your public folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
 	}
 
 	// The path to the "views" folder
