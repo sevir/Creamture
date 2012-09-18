@@ -69,6 +69,9 @@ p.notify{
 table.checks{
 	font-size: 11px;
 }
+textarea{
+	border: 1px solid #ccc;
+}
 </style>
 
 <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
@@ -118,6 +121,10 @@ table.checks{
 		<li>No broked code editing thousand lines</li>
 	</ul>
 	</li>
+	<li>PO International files support</li>
+	<li><a href="https://github.com/philsturgeon/codeigniter-restserver">REST Server API as module</a></li>
+	<li><a href="http://bstrahija.github.com/assets/">Assets library</a> with JS minify, CSS minify, LESS and CoffeeScript support</li>
+	<li>Boilerplate with <a href="http://backbonejs.org/">Backbone</a>, <a href="http://underscorejs.org/">Underscore</a> , <a href="http://jquery.com/">jQuery</a>  and <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a></li>
 	<!-- <li>Session in db improvements</li>
 	<li>Get params improvements, better support for $this->input->get_post()</li>
 	<!-- <li>Phing - Ant for PHP - <span class="red">(not available yet)</span></li> -->
@@ -190,6 +197,86 @@ RewriteRule ^(.*)$ /index.php?/$1 [L]
 <?php echo form_open('welcome/removeHtaccess');?>
 <button type="submit" name="remove">Remove .htaccess</button>
 </form>
+</div>
+
+<h1 class="expandible"><span>+</span> Configuration for Nginx</h1>
+<div>
+<textarea name="htaccess" class="htaccess">
+server
+{
+    server_name .example.com;
+ 
+    access_log /var/log/nginx/example.com.access.log;
+ 
+    root /var/www/example.com/html;
+ 
+    index index.php index.html index.htm;
+ 
+    # enforce www (exclude certain subdomains)
+#   if ($host !~* ^(www|subdomain))
+#   {
+#       rewrite ^/(.*)$ $scheme://www.$host/$1 permanent;
+#   }
+ 
+    # enforce NO www
+    if ($host ~* ^www\.(.*))
+    {
+        set $host_without_www $1;
+        rewrite ^/(.*)$ $scheme://$host_without_www/$1 permanent;
+    }
+ 
+    # canonicalize codeigniter url end points
+    # if your default controller is something other than "welcome" you should change the following
+    if ($request_uri ~* ^(/welcome(/index)?|/index(.php)?)/?$)
+    {
+        rewrite ^(.*)$ / permanent;
+    }
+ 
+    # removes trailing "index" from all controllers
+    if ($request_uri ~* index/?$)
+    {
+        rewrite ^/(.*)/index/?$ /$1 permanent;
+    }
+ 
+    # removes trailing slashes (prevents SEO duplicate content issues)
+    if (!-d $request_filename)
+    {
+        rewrite ^/(.+)/$ /$1 permanent;
+    }
+ 
+    # removes access to "system" folder, also allows a "System.php" controller
+    if ($request_uri ~* ^/system)
+    {
+        rewrite ^/(.*)$ /index.php?/$1 last;
+        break;
+    }
+ 
+    # unless the request is for a valid file (image, js, css, etc.), send to bootstrap
+    if (!-e $request_filename)
+    {
+        rewrite ^/(.*)$ /index.php?/$1 last;
+        break;
+    }
+ 
+    # catch all
+    error_page 404 /index.php;
+ 
+    # use fastcgi for all php files
+    location ~ \.php$
+    {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME /var/www/example.com/html$fastcgi_script_name;
+        include fastcgi_params;
+    }
+ 
+    # deny access to apache .htaccess files
+    location ~ /\.ht
+    {
+        deny all;
+    }
+}
+</textarea>
 </div>
 
 <p><br />Page rendered in {elapsed_time} seconds</p>
