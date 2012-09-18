@@ -7,7 +7,7 @@
 
 define('CREAMATOR', APPPATH.'modules/creamator');
 
-class Creamator extends MX_Controller {
+class Creamator extends CI_Controller {
 	var $commands = array();
 
 	function __construct(){
