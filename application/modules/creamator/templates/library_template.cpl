@@ -1,0 +1,13 @@
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+class %NAME% {
+
+	var $CI; //CodeIgniter instance
+
+	public function __construct()
+	{
+		$this->CI =& get_instance();
+	}
+}
+
+/* eof file %FILE_PATH% */

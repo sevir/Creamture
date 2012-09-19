@@ -1,0 +1,31 @@
+Creamture is an Open Source Framework based in CodeIgniter.
+
+Original project of SeViR (Jose Francisco Rives Lirola)
+DIGIO Soluciones Digitales http://www.digio.es - & Accesium
+Technology - http://www.accesium.es -
+
+FEATURES
+_________________________________________________________________
+
+Simply install and open the welcome page, you have all you need
+there ;-)
+
+
+INSTALLATION
+_________________________________________________________________
+
+Decompress all the files, point your virtual host to the "public"
+folder.
+Save the public assets to the "public" folder (imgs, js, css,...)
+
+AGREEMENTS
+_________________________________________________________________
+
+* lfrancoP for the bugfixes
+* jmlweb for the interfaces and design
+* jcavard for his initial Language Application Editor, thanks for
+your fantastic idea, we have to improve it.
+* wiredesignz for HMVC Implementation
+* Andreas Suderlund for SimpleTest CI library
+* CodeIgniter Reactor Team
+* All people who they has made this proyect a reality.
