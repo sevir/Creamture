@@ -123,6 +123,7 @@ textarea{
 	</li>
 	<li>PO International files support</li>
 	<li><a href="https://github.com/philsturgeon/codeigniter-restserver">REST Server API as module</a></li>
+	<li><a href="http://www.dmontgomery.net/bitauth/">BitAuth library for a fast support of users, groups, permissions, roles,...</a></li>
 	<li><a href="http://bstrahija.github.com/assets/">Assets library</a> with JS minify, CSS minify, LESS and CoffeeScript support</li>
 	<li>Boilerplate with <a href="http://backbonejs.org/">Backbone</a>, <a href="http://underscorejs.org/">Underscore</a> , <a href="http://jquery.com/">jQuery</a>  and <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a></li>
 	<!-- <li>Session in db improvements</li>
