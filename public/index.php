@@ -97,6 +97,13 @@ if (defined('ENVIRONMENT'))
 	$view_folder = '';
 
 /*
+ *---------------------------------------------------------------
+ * SPARKS FOLDER NAME
+ *---------------------------------------------------------------
+ */
+	$sparks_folder = '../sparks';
+
+/*
  * --------------------------------------------------------------------
  * DEFAULT CONTROLLER
  * --------------------------------------------------------------------
@@ -216,7 +223,9 @@ if (defined('ENVIRONMENT'))
 	if (is_dir($public_folder))
 	{
 		define('PUBLICPATH', $public_folder.'/');
-	}else{
+	}
+	else
+	{
 		exit("Your public folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
 	}
 
@@ -234,6 +243,16 @@ if (defined('ENVIRONMENT'))
 		}
 
 		define ('VIEWPATH', APPPATH.'views/' );
+	}
+
+	// The path to the "sparks" folder
+	if (is_dir($sparks_folder))
+	{
+		define('SPARKPATH', $sparks_folder.'/');
+	}
+	else
+	{
+		exit("Your sparks folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
 	}
 
 /*
