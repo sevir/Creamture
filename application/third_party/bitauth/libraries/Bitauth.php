@@ -117,7 +117,7 @@ class Bitauth
 
 		if($user !== FALSE)
 		{
-			if($this->phpass->CheckPassword($password, $user->password) || ($password === NULL && $user->remember_me == $token))
+			if($this->phpass->CheckPassword($password, $user->password) || ($password === NULL && $user->remember_me == $token) || ($password === NULL && $user->forgot_code == $token))
 			{
 				if( ! empty($this->_login_fields) && ! $this->check_login_fields($user, $extra))
 				{
