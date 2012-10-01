@@ -12,7 +12,6 @@ $creamator['Assets Commands'] = array(
 
 function clearAssetsCache($type=null){
     $CI = & get_instance();
-    $CI->load->spark('assets/1.5.0');
 
     $CI->load->helper('directory');
 

@@ -45,7 +45,7 @@ class Twig
 		$this->_twig->addExtension(new Twig_Extensions_Extension_I18n());
 
 		//Metemos el soporte de la librería assets en Twig
-		$this->CI->load->spark('assets/1.5.0');
+		$this->CI->load->spark('assets/1.5.1');
 		$this->add_function('array'); //php function
 		$this->add_function('assets_css');		
 		$this->add_function('assets_js');
