@@ -2,5 +2,6 @@
 .project
 .settings
 application/cache/*
+application/cache/twig/*
 application/logs/*
 public/assets/cache/*
