@@ -16,6 +16,7 @@ class Install extends MX_Controller {
 			redirect('install/');
 		}
 
+		$this->load->spark('assets/1.5.1');
 		$this->load->view('welcome_message', array('config'=>$this->_getConfig() ) );
 	}
 
