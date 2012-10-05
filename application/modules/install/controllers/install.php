@@ -1,11 +1,24 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Install extends MX_Controller {
+	private $assets;
 
 	function __construct()
     {
         parent::__construct();
 		$this->load->library('session');
+
+		$assets = array(
+			'js'=>'../../../application/modules/install/assets/js/',
+			'css'=>'../../../application/modules/install/assets/css/'
+		);
+    }
+
+    public function test(){
+    	$this->load->spark('assets/1.5.1');
+    	$this->load->view('install_view', array(
+    		'assets'=>$this->assets
+    	));
     }
 
 	public function index()
