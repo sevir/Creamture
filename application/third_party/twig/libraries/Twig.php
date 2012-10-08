@@ -42,7 +42,8 @@ class Twig
                 'cache' => $this->_cache_dir,
                 'debug' => $debug,
 		));
-		$this->_twig->addExtension(new Twig_Extensions_Extension_I18n());
+		if(function_exists('gettext'))
+			$this->_twig->addExtension(new Twig_Extensions_Extension_I18n());
 
 		//Metemos el soporte de la librería assets en Twig
 		$this->CI->load->spark('assets/1.5.1');
