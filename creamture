@@ -193,11 +193,87 @@
 	}
 
 /*
+ *---------------------------------------------------------------------
  * Environment configuration
+ * --------------------------------------------------------------------
  */
 if(!isset($_SERVER['SERVER_NAME']))
 	$_SERVER['SERVER_NAME'] = php_uname('n'); //fix CLI
+
+/*
+ * OS Detection
+ */
+$config = array();
+$config['os'] = array(''=>false);
+$config['os']['windows'] = preg_match('/^win/i', PHP_OS);
+$config['os']['unix'] = preg_match('/^linux|unix/i', PHP_OS);
+$config['os']['osx'] = preg_match('/^darwin/i', PHP_OS);
+
 include_once(APPPATH.'config/environment.php');
+
+/*
+ *	Set environment configuration
+ */
+
+	if ($config['automatic_environment']){
+		//detect by server name
+		if (in_array(php_uname('n'), $config['prod_server_name']) || $config['os'][$config['prod_os']])
+			$env = 'production';
+		else if (in_array(php_uname('n'), $config['testing_server_name']) || $config['os'][$config['testing_os']])
+			$env = 'testing';
+		else if (in_array(php_uname('n'), $config['devel_server_name']) || $config['os'][$config['devel_os']])
+			$env = 'development';
+		else
+			$env = $config['manual_environment'];
+	}else{
+		$env = $config['manual_environment'];
+	}
+
+
+
+	define('ENVIRONMENT', $env);
+/*
+ *---------------------------------------------------------------
+ * ERROR REPORTING
+ *---------------------------------------------------------------
+ *
+ * Different environments will require different levels of error reporting.
+ * By default development will show errors but testing and live will hide them.
+ */
+
+/*
+ * Load PHP_Error Library
+ */
+if($config['enable_error_improvement']){
+	require(APPPATH.'third_party/php_error/php_error.php');
+	$e = \php_error\reportErrors(array(
+	  'application_folders' => APPPATH,
+	  'ignore_folders' => BASEPATH
+	));
+}
+
+
+if (defined('ENVIRONMENT'))
+{
+	switch (ENVIRONMENT)
+	{
+		case 'development':
+			error_reporting(E_ALL);
+			if($config['enable_error_improvement'])
+				$e->turnOn();
+		break;
+
+		case 'testing':
+		case 'production':
+			error_reporting(0);
+			if($config['enable_error_improvement'])
+				$e->turnOff();
+		break;
+
+		default:
+			exit('The application environment is not set correctly.');
+	}
+}
 
 /*
  * --------------------------------------------------------------------

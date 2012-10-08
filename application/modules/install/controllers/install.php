@@ -1,29 +1,38 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Install extends MX_Controller {
+class Install extends TWIG_Controller {
 	private $assets;
+
+	var $twig_debug = TRUE;
 
 	function __construct()
     {
+    	$this->views_path = APPPATH.'modules/install/views';
+
         parent::__construct();
+
 		$this->load->library('session');
 
-		$assets = array(
+		$this->assets = array(
 			'js'=>'../../../application/modules/install/assets/js/',
 			'css'=>'../../../application/modules/install/assets/css/'
 		);
+		$this->load->helper(array('form','url','install'));
     }
 
     public function test(){
     	$this->load->spark('assets/1.5.1');
-    	$this->load->view('install_view', array(
-    		'assets'=>$this->assets
+
+    	
+    	$this->twig->display('install_view.twig', array(
+    		'assets'=>$this->assets,
+    		'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/')
     	));
+    	
     }
 
 	public function index()
 	{
-		$this->load->helper(array('form','url'));
 
 		if( strpos($_SERVER['REQUEST_URI'] , 'install') === FALSE){
 			redirect('install/');

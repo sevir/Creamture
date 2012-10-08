@@ -146,9 +146,8 @@ textarea{
 <div>
 <p>
 <ul>
-	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../install/simpleTester')?>">Run the tests</a></li>
-	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../install/twigTest')?>">Try Twig template example</li></a>
-	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../test_hmvc')?>">Test HMVC Module</li></a>
+	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../../install/simpleTester')?>">Run the tests</a></li>
+	<li><a href="<?php echo auto_link($this->config->item('index_page').'/../../install/twigTest')?>">Try Twig template example</li></a>
 </ul>
 </p>
 </div>

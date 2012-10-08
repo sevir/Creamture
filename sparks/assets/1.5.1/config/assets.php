@@ -9,8 +9,8 @@
 |
 */
 
-$config['assets']['minify_css']           = true;
-$config['assets']['minify_js']            = true;
+$config['assets']['minify_css']           = false;
+$config['assets']['minify_js']            = false;
 $config['assets']['enable_less']          = true;
 $config['assets']['enable_coffeescript']  = true;
 $config['assets']['freeze']               = false;
