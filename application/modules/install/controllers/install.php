@@ -18,28 +18,31 @@ class Install extends TWIG_Controller {
 			'css'=>'../../../application/modules/install/assets/css/'
 		);
 		$this->load->helper(array('form','url','install'));
-    }
-
-    public function test(){
-    	$this->load->spark('assets/1.5.1');
-
-    	
-    	$this->twig->display('install_view.twig', array(
-    		'assets'=>$this->assets,
-    		'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/')
-    	));
-    	
+		$this->twig->add_function('getActualSection');
     }
 
 	public function index()
 	{
+		redirect('install/features');
+	}
 
-		if( strpos($_SERVER['REQUEST_URI'] , 'install') === FALSE){
-			redirect('install/');
-		}
-
+	public function features(){
 		$this->load->spark('assets/1.5.1');
-		$this->load->view('welcome_message', array('config'=>$this->_getConfig() ) );
+		$this->twig->display('install_view.twig', array(
+			'assets'=>$this->assets,
+    		'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
+    		'install_path'=>auto_link($this->config->item('index_page').'/../../install')
+		) );
+	}
+
+	public function setup(){
+		$this->load->spark('assets/1.5.1');
+		$this->twig->display('setup_view.twig', array(
+			'config'=>$this->_getConfig(),
+			'assets'=>$this->assets,
+    		'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
+    		'install_path'=>auto_link($this->config->item('index_page').'/../../install')
+		) );
 	}
 
 	public function simpleTester(){
@@ -52,24 +55,6 @@ class Install extends TWIG_Controller {
 
 	public function info(){
 		phpinfo();
-	}
-
-	public function twigTest(){
-		$this->load->add_package_path(APPPATH.'third_party/twig/');
-
-		$this->load->library('twig', array('debug'=>true, 'template_dir'=>APPPATH.'modules/install/views'));
-
-		$data = array(
-			'content'=> 'Twig is a modern template engine for PHP',
-			'title'=> 'Twig template system example',
-			'features'=> array(
-					'Django syntax',
-					'Fast, compiles to plain optimized PHP code',
-					'Secure, with own template language',
-					'Flexible, allows to define own custom tags and filters and create its own DSL'
-				)
-			);
-		$this->twig->display('twigTest_example.twig', $data);
 	}
 
 	public function saveHtaccess(){
@@ -131,9 +116,11 @@ class Install extends TWIG_Controller {
 		$result['mod_rewrite'] = $this->_detectApacheModule('mod_rewrite');
 		$result['mod_deflate'] = $this->_detectApacheModule('mod_deflate');
 		$result['zlib_enabled'] = function_exists('gzopen');
+		$result['gettext_enabled'] = function_exists('gettext');
 		$result['zlib_compression_enabled'] = ini_get('zlib_output_compression');
 		$result['log_write_permissions'] = $this->_get_perms(APPPATH.'logs');
 		$result['cache_write_permissions'] = $this->_get_perms(APPPATH.'cache');
+		$result['assets_cache_write_permissions'] = $this->_get_perms(PUBLICPATH.'assets/cache');
 
 		return $result;
 	}

@@ -24,14 +24,14 @@
             <![endif]-->
             <div class="navbar">
               <div class="navbar-inner">
-                <a class="brand" href="#features"><img src="{{img_path}}logo-menu.png" /> Creamture <span>Framework</span></a>
+                <a class="brand" href="{{ install_path }}/features"><img src="{{img_path}}logo-menu.png" /> Creamture <span>Framework</span></a>
                 <ul class="nav">
-                  <li class="active"><a href="#features">{% trans "Features" %}</a></li>
-                  <li><a href="#setup">{% trans "Setup" %}</a></li>
-                  <li><a href="#database">{% trans "Database" %}</a></li>
-                  <li><a href="#documentation">{% trans "Documentation" %}</a></li>
-                  <li><a href="#licenses">{% trans "Licenses" %}</a></li>
-                  <li><a href="#agreements">{% trans "Agreements" %}</a></li>
+                  <li class="{{getActualSection('features')}}"><a href="{{ install_path }}/features">{% trans "Features" %}</a></li>
+                  <li class="{{getActualSection('setup')}}"><a href="{{ install_path }}/setup">{% trans "Setup" %}</a></li>
+                  <li class="{{getActualSection('database')}}"><a href="{{ install_path }}/database">{% trans "Database" %}</a></li>
+                  <li class="{{getActualSection('documentation')}}"><a href="{{ install_path }}/documentation">{% trans "Documentation" %}</a></li>
+                  <li class="{{getActualSection('licenses')}}"><a href="{{ install_path }}/licenses">{% trans "Licenses" %}</a></li>
+                  <li class="{{getActualSection('agreements')}}"><a href="{{ install_path }}/agreements">{% trans "Agreements" %}</a></li>
                 </ul>
               </div>
             </div>
@@ -40,7 +40,7 @@
               {% block content %}{% endblock %}
             </div>
 
-            <div class="footer row-fluid">made with love in DIGIO Soluciones Digitales &copy; 2012</div>
+            <div class="footer row-fluid">{% trans "made with love in DIGIO Soluciones Digitales" %} &copy; 2012</div>
         </div>
     </body>
 </html>

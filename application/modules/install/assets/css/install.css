@@ -41,3 +41,17 @@ body{
 		color: #333;
 	}
 }
+
+.nav-pills{
+	background: #FDFDFD;
+	border-radius: 5px;
+	padding: 5px 0;
+
+	.nav-header{
+		color: #333;
+	}
+
+	a{
+		color: #777;
+	}
+}
