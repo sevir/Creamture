@@ -6,6 +6,7 @@ class Twig
 	private $_twig;
 	private $_template_dir;
 	private $_cache_dir;
+	private $_debug;
 
 	/**
 	 * Constructor
@@ -13,7 +14,7 @@ class Twig
 	 */
 	function __construct($params = array())
 	{
-		$debug = (isset($params['debug'])?$params['debug']:FALSE);
+		$this->_debug = (isset($params['debug'])?$params['debug']:FALSE);
 		$template_dir = (isset($params['template_dir'])?$params['template_dir']:FALSE);
 
 
@@ -40,18 +41,24 @@ class Twig
 
 		$this->_twig = new Twig_Environment($loader, array(
                 'cache' => $this->_cache_dir,
-                'debug' => $debug,
+                'debug' => $this->_debug,
 		));
 		if(function_exists('gettext'))
 			$this->_twig->addExtension(new Twig_Extensions_Extension_I18n());
 
-		//Metemos el soporte de la librerÃ­a assets en Twig
-		$this->CI->load->spark('assets/1.5.1');
-		$this->add_function('array'); //php function
+		// Soporte de funciones nativas de PHP
+		$this->add_function('array');
+
+		// Soporte de la librería assets
+		$this->CI->load->spark('assets/1.5.0');
 		$this->add_function('assets_css');		
 		$this->add_function('assets_js');
 		$this->add_function('assets_css_group');		
 		$this->add_function('assets_js_group');
+
+		// Soporte de HMVC
+		require_once APPPATH . 'third_party/twig/helpers/extensions_helper.php';
+		$this->add_function('modules_run');
 	}
 
 	public function generate_gettext($tmpDir){
@@ -85,6 +92,27 @@ class Twig
 		return $template->render($data);
 	}
 
+	public function render_string($string, $data = array())
+	{
+		$loader = new Twig_Loader_String();
+		$twig = new Twig_Environment($loader, array(
+			'cache' => $this->_cache_dir,
+			'debug' => $this->_debug,
+		));
+
+		if(function_exists('gettext'))
+		{
+			$twig->addExtension(new Twig_Extensions_Extension_I18n());
+		}
+
+		$twig->addFunction('array', new Twig_Function_Function('array'));
+		$twig->addFunction('assets_css_group', new Twig_Function_Function('assets_css_group'));
+		$twig->addFunction('assets_js_group', new Twig_Function_Function('assets_js_group'));
+		$twig->addFunction('modules_run', new Twig_Function_Function('modules_run'));
+
+		return $twig->render($string, $data);
+	}
+
 	public function display($template, $data = array())
 	{
 		$template = $this->_twig->loadTemplate($template);
@@ -94,4 +122,6 @@ class Twig
 		$data['memory_usage'] = $memory;
 		$template->display($data);
 	}
+
 }
+/* EOF */
