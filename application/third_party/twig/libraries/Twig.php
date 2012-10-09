@@ -50,7 +50,7 @@ class Twig
 		$this->add_function('array');
 
 		// Soporte de la librería assets
-		$this->CI->load->spark('assets/1.5.0');
+		$this->CI->load->spark('assets/1.5.1');
 		$this->add_function('assets_css');		
 		$this->add_function('assets_js');
 		$this->add_function('assets_css_group');		
