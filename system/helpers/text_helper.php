@@ -51,7 +51,7 @@ if ( ! function_exists('word_limiter'))
 	 */
 	function word_limiter($str, $limit = 100, $end_char = '&#8230;')
 	{
-		if (trim($str) == '')
+		if (trim($str) === '')
 		{
 			return $str;
 		}
@@ -89,7 +89,8 @@ if ( ! function_exists('character_limiter'))
 			return $str;
 		}
 
-		$str = preg_replace('/\s+/', ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
+		// a bit complicated, but faster than preg_replace with \s+
+		$str = preg_replace('/ {2,}/', ' ', str_replace(array("\r", "\n", "\t", "\x0B", "\x0C"), ' ', $str));
 
 		if (strlen($str) <= $n)
 		{
@@ -258,7 +259,7 @@ if ( ! function_exists('word_censor'))
 
 		foreach ($censored as $badword)
 		{
-			if ($replacement != '')
+			if ($replacement !== '')
 			{
 				$str = preg_replace("/({$delim})(".str_replace('\*', '\w*?', preg_quote($badword, '/')).")({$delim})/i", "\\1{$replacement}\\3", $str);
 			}
@@ -338,12 +339,12 @@ if ( ! function_exists('highlight_phrase'))
 	 */
 	function highlight_phrase($str, $phrase, $tag_open = '<strong>', $tag_close = '</strong>')
 	{
-		if ($str == '')
+		if ($str === '')
 		{
 			return '';
 		}
 
-		if ($phrase != '')
+		if ($phrase !== '')
 		{
 			return preg_replace('/('.preg_quote($phrase, '/').')/i', $tag_open.'\\1'.$tag_close, $str);
 		}
@@ -464,7 +465,7 @@ if ( ! function_exists('word_wrap'))
 
 			// If $temp contains data it means we had to split up an over-length
 			// word into smaller chunks so we'll add it back to our current line
-			if ($temp != '')
+			if ($temp !== '')
 			{
 				$output .= $temp."\n".$line."\n";
 			}

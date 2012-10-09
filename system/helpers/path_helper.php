@@ -32,7 +32,7 @@
  * @subpackage	Helpers
  * @category	Helpers
  * @author		EllisLab Dev Team
- * @link		http://codeigniter.com/user_guide/helpers/xml_helper.html
+ * @link		http://codeigniter.com/user_guide/helpers/path_helper.html
  */
 
 // ------------------------------------------------------------------------
@@ -55,7 +55,7 @@ if ( ! function_exists('set_realpath'))
 		}
 
 		// Resolve the path
-		if (function_exists('realpath') && @realpath($path) !== FALSE)
+		if (@realpath($path) !== FALSE)
 		{
 			$path = realpath($path);
 		}
