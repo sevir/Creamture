@@ -15,17 +15,22 @@ $creamator['GetText Commands'] = array(
     ),
     'generateTwigGettext' => array(
         'description'=>'Generate preprocessed files of Twig Templates for Gettext',
-        'usage' => 'creamator generateTwigGettext',
+        'usage' => 'creamator generateTwigGettext <module name>',
+        'parameters' => array('Optional module name'),
         'num_parameters' => 0
     )
 );
 
-function generateTwigGettext(){
+function generateTwigGettext($module=NULL){
     $CI = & get_instance();
     $CI->config->load('language');
 
     $CI->load->add_package_path(APPPATH.'third_party/twig/');
-    $CI->load->library('twig', array('debug'=>true, 'template_dir'=>APPPATH.'twig/views'));
+
+    if($module)
+        $CI->load->library('twig', array('debug'=>true, 'template_dir'=>APPPATH.'modules/'.$module.'/views'));
+    else
+        $CI->load->library('twig', array('debug'=>true, 'template_dir'=>APPPATH.'views'));
 
     $CI->twig->generate_gettext($CI->config->item('twig_tmp_locale_dir'));
 
