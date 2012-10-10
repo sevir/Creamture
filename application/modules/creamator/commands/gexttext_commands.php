@@ -41,7 +41,7 @@ function generateGettext($directory){
     println('Generating php file list');
 
     $path_tmp_files = $CI->config->item('locale_dir').'../';
-	$result = directoryToArray($directory, true, false, true, '/cache|logs/', '/.*\/(application|i18n)\/.*php/');
+	$result = directoryToArray($directory, true, false, true, '/cache|logs/', '/.*(\/|\\\\)(application|i18n)((\/|\\\\)).*php/');
 
 	$CI->load->helper('file');
 
@@ -186,7 +186,7 @@ function directoryToArray($directory, $recursive = true, $listDirs = false, $lis
     $handle = opendir($directory);
     if ($handle) {
         while (false !== ($file = readdir($handle))) {
-        preg_match('/(^(([\.]){1,2})$|(\.(svn|git|md))|(Thumbs\.db|\.DS_STORE))$/iu', $file, $skip);
+        preg_match('/(^(([\.]){1,2})$|(\.(svn|git|gitignore|md))|(Thumbs\.db|\.DS_STORE))$/iu', $file, $skip);
         if($exclude){
             preg_match($exclude, $directory . DIRECTORY_SEPARATOR . $file, $skipByExclude);
         }
