@@ -10,11 +10,11 @@
         <meta name="description" content="Creamture Framework installation">
         <meta name="viewport" content="width=device-width">
         {{ assets_css_group('main_css', array('bootstrap.min.css', 'bootstrap-responsive.min.css')) }}
-        {{ assets_css_group('install_css', array( assets['css']~'install.css')) }}
+        {{ assets_css_group('install_css', array( module_assets['css']~'install.css')) }}
          
 
         {{ assets_js_group('main_js', array('libs/modernizr-2.6.1-respond-1.1.0.min.js', 'libs/jquery-1.7.2.min.js', 'libs/bootstrap.min.js')) }}
-        {{ assets_js_group('install_js', array(assets['js']~'install.js')) }}
+        {{ assets_js_group('install_js', array(module_assets['js']~'install.js')) }}
         <link rel="shortcut icon" href="{{img_path}}logo-menu.png" />
     </head>
     <body style="background:#fff url({{img_path}}bg.png);">
