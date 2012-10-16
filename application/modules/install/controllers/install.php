@@ -7,8 +7,6 @@ class Install extends TWIG_Controller {
 
 	function __construct()
     {
-    	$this->views_path = APPPATH.'modules/install/views';
-
         parent::__construct();
 
 		$this->load->library('session');

@@ -17,7 +17,6 @@ class Twig
 		$this->_debug = (isset($params['debug'])?$params['debug']:FALSE);
 		$template_dir = (isset($params['template_dir'])?$params['template_dir']:FALSE);
 
-
 		$this->CI =& get_instance();
 		$this->CI->load->config('twig');
 
