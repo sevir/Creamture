@@ -176,7 +176,8 @@ class MX_Loader extends CI_Loader
 		
 		if (is_array($model)) return $this->models($model);
 
-		($_alias = $object_name) OR $_alias = end(explode('/', $model));
+		$exploded_module = explode('/', $model);
+		($_alias = $object_name) OR $_alias = end($exploded_module);
 
 		if (in_array($_alias, $this->_ci_models, TRUE)) 
 			return CI::$APP->$_alias;
