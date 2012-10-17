@@ -1,62 +1,60 @@
 <?php  if (! defined('BASEPATH')) exit('No direct script access allowed');
 
 class TWIG_Controller extends MX_Controller{
-	protected $twig_debug;
+	// protected $twig_debug;
 	protected $assets_path;
 
 	public function __construct(){
 		parent::__construct();
+		$this->load->spark('twiggy/0.8.5');
 
-		$this->load->add_package_path(APPPATH.'third_party/twig/');
-
-		if(empty($this->twig_debug))
-			$this->twig_debug = TRUE;
-
-		if (file_exists(APPPATH.'modules/'.strtolower(get_called_class()).'/views')){
-			$this->load->config('twig');
-			if (is_array($this->config->item('template_dir'))){
-				$this->config->set_item('template_dir', array_unshift(
-					$this->config->item('template_dir'), 
-					APPPATH.'modules/'.strtolower(get_called_class()).'/views'
-					)
-				);
-			}else{
-				$this->config->set_item('template_dir', array(
-					APPPATH.'modules/'.strtolower(get_called_class()).'/views',
-					$this->config->item('template_dir')
-				));
-			}	
-			
-			$this->load->spark('assets/1.5.1');
+		$this->load->spark('assets/1.5.1');
+		if (file_exists(APPPATH.'modules/'.strtolower(get_called_class()).'/assets')){
 			$this->load->config('assets');
 			$assets_config = $this->config->item('assets');
+
 			$this->assets_path = array(
 				'js'=>$this->getRelativePath(
 					realpath(PUBLICPATH.$assets_config['assets_dir'].'/'.$assets_config['js_dir']),
 					realpath(APPPATH.'modules/'.strtolower(get_called_class()).'/assets/js')
-					),
+					).'/',
 				'css'=>$this->getRelativePath(
 					realpath(PUBLICPATH.$assets_config['assets_dir'].'/'.$assets_config['css_dir']),
 					realpath(APPPATH.'modules/'.strtolower(get_called_class()).'/assets/css')
-					),
+					).'/',
 				'img'=>$this->getRelativePath(
 					realpath(PUBLICPATH.$assets_config['assets_dir'].'/'.$assets_config['img_dir']),
 					realpath(APPPATH.'modules/'.strtolower(get_called_class()).'/assets/img')
-					),
+					).'/',
 			);
-		}		
+		}
 
-		$this->load->library('twig', array('debug'=>$this->twig_debug));
+
+		//Global extended Twig
+		if (function_exists('gettext'))
+			$this->twiggy->register_extension('Twig_Extensions_Extension_I18n');
+		$this->twiggy->register_function('assets_css');
+		$this->twiggy->register_function('assets_js');
+		$this->twiggy->register_function('assets_css_group');
+		$this->twiggy->register_function('assets_js_group');
 	}
 
 	protected function display($template, $data = array()){
-		if (is_array($this->assets_path))
-			$this->twig->display($template, array_merge($data, array('module_assets'=>$this->assets_path)));
-		else
-			$this->twig->display($template, $data);
+		if (is_array($this->assets_path)){
+			$data['module_assets'] = $this->assets_path;
+		}
+		$this->twiggy->set($data)->template($template)->display();
 	}
 
-	protected function getRelativePath($from, $to)
+	protected function register_function($fname){
+		$this->twiggy->register_function($fname);
+	}
+
+	protected function register_filter($fname){
+		$this->twiggy->register_filter($fname);
+	}	
+
+	private function getRelativePath($from, $to)
 	{
 	   $from = explode('/', $from);
 	   $to = explode('/', $to);
@@ -77,7 +75,7 @@ class TWIG_Controller extends MX_Controller{
 	        }
 	    }
 	    //$rawresult = implode('/', $to);
-	    for($i=0;$i<count($from)-1;$i++)
+	    for($i=0;$i<count($from);$i++)
 	    {
 	        array_unshift($to,'..');
 	    }

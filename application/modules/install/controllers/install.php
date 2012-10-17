@@ -11,8 +11,8 @@ class Install extends TWIG_Controller {
 
 		$this->load->library('session');
 
-		$this->load->helper(array('form','url','install'));
-		$this->twig->add_function('getActualSection');
+		$this->load->helper(array('form','url'));
+		$this->register_function('getActualSection');
     }
 
 	public function index()
@@ -21,7 +21,7 @@ class Install extends TWIG_Controller {
 	}
 
 	public function features(){
-		$this->display('install_view.twig', array(
+		$this->display('install_view', array(
     		'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
     		'install_path'=>auto_link($this->config->item('index_page').'/../../install')
 		) );
@@ -29,7 +29,7 @@ class Install extends TWIG_Controller {
 
 	public function setup(){
 		$this->load->spark('assets/1.5.1');
-		$this->twig->display('setup_view.twig', array(
+		$this->display('setup_view', array(
 			'config'=>$this->_getConfig(),
 			'assets'=>$this->assets,
     		'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
