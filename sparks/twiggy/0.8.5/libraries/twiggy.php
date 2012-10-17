@@ -436,6 +436,47 @@ class Twiggy
 		}
 	}
 
+	public function generate_gettext($tmpDir){
+		$tplDir = $this->_template_dir;
+		$loader = new Twig_Loader_Filesystem($tplDir);
+
+		// force auto-reload to always have the latest version of the template
+		$twig = new Twig_Environment($loader, array(
+		    'cache' => $tmpDir,
+		    'auto_reload' => true
+		));
+		$twig->addExtension(new Twig_Extensions_Extension_I18n());
+		// configure Twig the way you want
+
+		// iterate over all your templates
+		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tplDir), RecursiveIteratorIterator::LEAVES_ONLY) as $file)
+		{
+		  // force compilation
+		  $twig->loadTemplate(str_replace($tplDir.'/', '', $file));
+		}
+	}	
+
+	public function render_string($string, $data = array())
+	{
+		$loader = new Twig_Loader_String();
+		$twig = new Twig_Environment($loader, array(
+			'cache' => $this->_cache_dir,
+			'debug' => $this->_debug,
+		));
+
+		if(function_exists('gettext'))
+		{
+			$twig->addExtension(new Twig_Extensions_Extension_I18n());
+		}
+
+		$twig->addFunction('array', new Twig_Function_Function('array'));
+		$twig->addFunction('assets_css_group', new Twig_Function_Function('assets_css_group'));
+		$twig->addFunction('assets_js_group', new Twig_Function_Function('assets_js_group'));
+		$twig->addFunction('modules_run', new Twig_Function_Function('modules_run'));
+
+		return $twig->render($string, $data);
+	}	
+
 	/**
 	 * Display the compiled HTML content
 	 *
