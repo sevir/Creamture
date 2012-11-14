@@ -15,24 +15,74 @@ $creamator['GetText Commands'] = array(
     ),
     'generateTwigGettext' => array(
         'description'=>'Generate preprocessed files of Twig Templates for Gettext',
-        'usage' => 'creamator generateTwigGettext <module name>',
-        'parameters' => array('Optional module name'),
+        'usage' => 'creamator generateTwigGettext',
         'num_parameters' => 0
     )
 );
 
-function generateTwigGettext($module=NULL){
+/**
+ * Extract gettexted-text from Twig templates so that it can be parsed with POEDIT
+ */
+function generateTwigGettext()
+{
     $CI = & get_instance();
     $CI->config->load('language');
 
-    $CI->load->add_package_path(APPPATH.'third_party/twig/');
+    $tmpDir = $CI->config->item('twig_tmp_locale_dir');
+    $tplDirs = array(
+        APPPATH.'views'
+    );
 
-    if($module)
-        $CI->load->library('twig', array('debug'=>true, 'template_dir'=>APPPATH.'modules/'.$module.'/views'));
-    else
-        $CI->load->library('twig', array('debug'=>true, 'template_dir'=>APPPATH.'views'));
+    // fetch modules' view path too
+    $handle = opendir(APPPATH.'modules');
+    if ($handle)
+    {
+        while ( false !== ($module = readdir($handle)) )
+        {
+            // make sure we don't map silly dirs like .svn, or . or ..
+            if (substr($module, 0, 1) != ".")
+            {
+                if ( is_dir(APPPATH.'modules/'.$module.'/views') )
+                {
+                    $tplDirs[] = APPPATH.'modules/'.$module.'/views';
+                }
+            }
+        }
+    }
 
-    $CI->twig->generate_gettext($CI->config->item('twig_tmp_locale_dir'));
+    // load Twig
+    require_once APPPATH.'../sparks/twiggy/0.8.5/vendor/Twig/lib/Twig/Autoloader.php';
+    Twig_Autoloader::register();
+
+    foreach($tplDirs as $tplDir)
+    {
+        $loader = new Twig_Loader_Filesystem($tplDir);
+        $twig = new Twig_Environment($loader, array(
+            'cache' => $tmpDir,
+            'auto_reload' => TRUE
+        ));
+
+        // add extensions
+        $twig->addExtension(new Twig_Extensions_Extension_I18n());
+
+        // add functions
+        require_once APPPATH.'../sparks/twiggy/0.8.5/helpers/twiggy_helper.php';
+        $CI->load->spark('assets/1.5.1');
+        $twig->addFunction('array', new Twig_Function_Function('array'));
+        $twig->addFunction('assets_css_group', new Twig_Function_Function('assets_css_group'));
+        $twig->addFunction('assets_js_group', new Twig_Function_Function('assets_js_group'));
+        $twig->addFunction('assets_img', new Twig_Function_Function('assets_img'));
+        $twig->addFunction('getActualSection', new Twig_Function_Function('getActualSection'));
+
+        // iterate over all your templates
+        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tplDir), RecursiveIteratorIterator::LEAVES_ONLY) as $file)
+        {
+            // force compilation
+            if(preg_match('/\.twig$/', $file)) {
+                $twig->loadTemplate(str_replace($tplDir.'/', '', $file));
+            }
+        }
+    }
 
     println('Twig preprocessed files generated in: '.$CI->config->item('twig_tmp_locale_dir').' folder');
 }
