@@ -25,11 +25,11 @@
  * @filesource
  */
 
-$lang['terabyte_abbr'] = 'TB';
-$lang['gigabyte_abbr'] = 'GB';
-$lang['megabyte_abbr'] = 'MB';
-$lang['kilobyte_abbr'] = 'KB';
-$lang['bytes'] = 'Bytes';
+$lang['terabyte_abbr'] = _('TB');
+$lang['gigabyte_abbr'] = _('GB');
+$lang['megabyte_abbr'] = _('MB');
+$lang['kilobyte_abbr'] = _('KB');
+$lang['bytes'] = _('Bytes');
 
 /* End of file number_lang.php */
 /* Location: ./system/language/english/number_lang.php */

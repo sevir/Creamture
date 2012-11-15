@@ -42,16 +42,25 @@ body{
 	}
 }
 
-.nav-pills{
-	background: #FDFDFD;
-	border-radius: 5px;
-	padding: 5px 0;
+.mainmenu{
+	display: block;
+	position: inherit;
+}
 
-	.nav-header{
-		color: #333;
-	}
+.mainmenu .menuactive{
+	background-color: #0081C2;
+	background-image: -moz-linear-gradient(top, #CD9D6B, #E1B88C);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#CD9D6B), to(#E1B88C));
+	background-image: -webkit-linear-gradient(top, #CD9D6B, #E1B88C);
+	background-image: -o-linear-gradient(top, #CD9D6B, #E1B88C);
+	background-image: linear-gradient(to bottom, #CD9D6B, #E1B88C);
+}
 
-	a{
-		color: #777;
-	}
+.inner-content{
+	background: #fff;
+	-webkit-box-shadow: 0px 0px 2px 0px #cdcdcd;
+	box-shadow: 0px 0px 2px 0px #cdcdcd;
+	border: 1px #ddd solid;
+	padding: 20px;
+	border-radius: 3px;
 }

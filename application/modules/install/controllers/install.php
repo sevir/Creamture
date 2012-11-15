@@ -29,7 +29,7 @@ class Install extends TWIG_Controller {
 
 	public function setup(){
 		$this->load->spark('assets/1.5.1');
-		$this->display('setup_view', array(
+		$this->display('overview_view', array(
 			'config'=>$this->_getConfig(),
 			'assets'=>$this->assets,
     		'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),

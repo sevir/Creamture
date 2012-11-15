@@ -1,15 +1,25 @@
 {% extends "layout/install_layout.twig" %}
 
 {% block content %}
-<div class="span2 bs-docs-sidebar">
-	<ul class="nav nav-pills nav-stacked bs-docs-sidenav inverse">
-		<li><a href="#overview"><i class="icon-chevron-right"></i> Overview</a></li>
-		<li><a href="#overview"><i class="icon-chevron-right"></i> Phpinfo</a></li>
+<div class="span2">
+	<ul class="dropdown-menu mainmenu" role="menu" aria-labelledby="dropdownMenu" data-spy="affix" data-offset-top="200">
+		<li class="menuactive"><a href="#overview"><i class="icon-ok-sign"></i> {% trans "Overview" %}</a></li>
+		<li><a href="#overview"><i class="icon-info-sign"></i> {% trans "Phpinfo" %}</a></li>
 		<li class="divider"></li>
-		<li class="nav-header">Server configuration</li>
-		<li><a href="#transitions"><i class="icon-chevron-right"></i> Apache .htaccess</a></li>
-		<li><a href="#transitions"><i class="icon-chevron-right"></i> Nginx</a></li>
+		<li class="dropdown-submenu">
+			<a href="#">{% trans "Server configuration" %}</a>
+			<ul class="dropdown-menu">
+				<li><a href="#transitions"><i class="icon-cog"></i> {% trans "Apache .htaccess" %}</a></li>
+				<li><a href="#transitions"><i class="icon-cog"></i> {% trans "Nginx" %}</a></li>
+			</ul>
+		</li>		
 	</ul>
 </div>
-<div class="span9"></div>
+<div class="span10">
+	<div class="inner-content">
+		{% block innercontent %}
+		    
+		{% endblock %}
+	</div>
+</div>
 {% endblock %}
