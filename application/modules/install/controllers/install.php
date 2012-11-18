@@ -60,17 +60,14 @@ class Install extends TWIG_Controller {
 		) );
 	}
 
-	public function simpleTester(){
-		$this->load->add_package_path(APPPATH.'third_party/simpletester/');
-		$this->load->library('simpletester');
-
-		$this->load->helper(array('form','url'));
-		$this->load->view('welcome_message', array('config'=>$this->_getConfig() ) );
+	public function database(){
+		$this->display('database_view', array(
+			'assets'=>$this->assets,
+			'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
+    		'install_path'=>auto_link($this->config->item('index_page').'/../../install')
+		));
 	}
 
-	public function info(){
-		phpinfo();
-	}
 
 	public function saveHtaccess(){
 		$this->load->helper(array('file','url'));
