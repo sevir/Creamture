@@ -46,6 +46,12 @@ class TWIG_Controller extends MX_Controller{
 		$this->twiggy->set($data)->template($template)->display();
 	}
 
+	protected function response($data){
+		$this->output->set_header('Content-type: text/json');
+		echo json_encode($data);
+		return;
+	}
+
 	protected function register_function($fname){
 		$this->twiggy->register_function($fname);
 	}

@@ -20,7 +20,7 @@ if ( ! function_exists('getActualSection'))
 	function getActualSection($path, $string = 'active', $regexp = TRUE)
 	{
 		$pattern = str_replace('/','',$path);
-		$subject = str_replace('/','',uri_string());
+		$subject = str_replace('/','',$_SERVER['REQUEST_URI']);
 		if($regexp) {
 			if (preg_match('/'.$pattern.'/', preg_quote($subject))) {
 				return $string;

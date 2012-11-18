@@ -44,3 +44,10 @@ function loadGettext(){
     bind_textdomain_codeset($domain, 'UFT-8');
     textdomain($domain);
 }
+
+if( !function_exists("_")){
+  //failover gettext function
+  function _($string){
+    return $string;
+  }
+}

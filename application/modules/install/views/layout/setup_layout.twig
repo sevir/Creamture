@@ -1,0 +1,25 @@
+{% extends "layout/install_layout.twig" %}
+
+{% block content %}
+<div class="span2">
+	<ul class="dropdown-menu mainmenu" role="menu" aria-labelledby="dropdownMenu" data-spy="affix" data-offset-top="200">
+		<li class="{{ getActualSection('overview','menuactive')}}"><a href="?type=overview"><i class="icon-ok-sign"></i> {% trans "Overview" %}</a></li>
+		<li class="{{ getActualSection('phpinfo','menuactive')}}"><a href="?type=phpinfo"><i class="icon-info-sign"></i> {% trans "Phpinfo" %}</a></li>
+		<li class="divider"></li>
+		<li class="dropdown-submenu">
+			<a href="?type=server">{% trans "Server configuration" %}</a>
+			<ul class="dropdown-menu">
+				<li class="{{ getActualSection('apache','menuactive')}}"><a href="?type=apache"><i class="icon-cog"></i> {% trans "Apache .htaccess" %}</a></li>
+				<li class="{{ getActualSection('nginx','menuactive')}}"><a href="?type=nginx"><i class="icon-cog"></i> {% trans "Nginx" %}</a></li>
+			</ul>
+		</li>		
+	</ul>
+</div>
+<div class="span10">
+	<div class="inner-content">
+		{% block innercontent %}
+		    
+		{% endblock %}
+	</div>
+</div>
+{% endblock %}

@@ -13,6 +13,18 @@ body{
 	.brand span{
 		font-size: 10px;
 	}
+
+	.brand img{
+		float: none !important;
+	}
+}
+
+a:link{
+	background-color: transparent !important;
+	color: #333 !important; 
+}
+.mainmenu a:hover{
+	color: #fff !important;
 }
 
 .footer{
@@ -63,4 +75,30 @@ body{
 	border: 1px #ddd solid;
 	padding: 20px;
 	border-radius: 3px;
+}
+
+.overflow{
+	overflow: auto;
+}
+
+p.small{
+	font-size: 10px;
+}
+
+.table-setup{
+	td{
+		vertical-align: middle;
+	}
+	p{
+		margin-bottom: 0;
+	}
+}
+
+.center{
+	text-align: center !important;
+}
+
+textarea{
+	width: 100%;
+	height: 300px;
 }

@@ -1,0 +1,4 @@
+name: My_model
+version: 1.0.0
+compatibility: 2.1.0
+tags: ["model","active record","database","db","orm"]

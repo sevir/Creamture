@@ -1,0 +1,125 @@
+{% extends "layout/setup_layout.twig" %}
+
+{% block innercontent %}
+	<h1>{% trans "Overview of the installation" %}</h1>
+	<p>{% trans "Please check and correct the installation" %}</p>
+	<table class="table table-bordered table-setup">
+		<tr class="{% if not config['cache_write_permissions'] %}error{% endif %}">
+			<td>
+				{% trans "Write permissions for application cache folder (0775 or 0777)" %}
+				<p class="small">{% trans "You must have write permissions to let Twig and the cache system works" %}.</p>
+			</td>
+			<td class="center">
+				 {% if config['cache_write_permissions']  %}
+					<i class="icon-ok"></i>
+				{% else %}
+					<i class="icon-remove"></i>
+				{% endif %}
+			</td>
+		</tr>
+		<tr class="{% if not config['assets_cache_write_permissions'] %}error{% endif %}">
+			<td>
+				{% trans "Write permissions for public assets cache folder (0775 or 0777)" %}
+				<p class="small">{% trans "You must have write permissions to let the assets library" %}.</p>
+			</td>
+			<td class="center">
+				{% if config['assets_cache_write_permissions'] %}
+					<i class="icon-ok"></i>
+				{% else %}
+					<i class="icon-remove"></i>
+				{% endif %}
+			</td>
+		</tr>
+		<tr class="{% if not config['log_write_permissions'] %}warning{% endif %}">
+			<td>
+				{% trans "Write permissions for logs folder (0775 or 0777)" %}
+				<p class="small">{% trans "You would have write permissions if you want to save logs" %}.</p>
+			</td>
+			<td class="center">
+				{% if config['log_write_permissions']  %}
+					<i class="icon-ok"></i>
+				{% else %}
+					<i class="icon-remove"></i>
+				{% endif %}
+			</td>
+		</tr>
+		<tr class="{% if not config['short_open_tag'] %}warning{% endif %}">
+			<td>
+				{% trans "Support for short open tags in your templates:" %}
+				<p class="small">{% trans "PHP short open tags would be enabled for a CodeIgniter template fast rendering" %}.</p>
+			</td>
+			<td class="center">
+				{% if config['short_open_tag']  %}
+					<i class="icon-ok"></i>
+				{% else %}
+					<i class="icon-remove"></i>
+				{% endif %}
+			</td>
+		</tr>
+		<tr class="{% if not config['mod_rewrite'] %}warning{% endif %}">
+			<td>
+				{% trans "Support for apache mod_rewrite (hide your index.php)" %}
+				<p class="small">{% trans "You would have mod_rewrite module enabled if you want to hide the index.php file and you are using apache server" %}.</p>
+			</td>
+			<td class="center">
+				{% if config['mod_rewrite']  %}
+					<i class="icon-ok"></i>
+				{% else %}
+					<i class="icon-remove"></i>
+				{% endif %}
+			</td>
+		</tr>
+		<tr class="{% if not config['mod_deflate'] %}warning{% endif %}">
+			<td>
+				{% trans "Support for mod_deflate (apache web compression)" %}
+				<p class="small">{% trans "If you have mod_deflate enabled you can compress assets using apache" %}.</p>
+			</td>
+			<td class="center">
+				{% if config['mod_deflate']  %}
+					<i class="icon-ok"></i>
+				{% else %}
+					<i class="icon-remove"></i>
+				{% endif %}
+			</td>
+		</tr>
+		<tr class="{% if not config['zlib_enabled'] %}warning{% endif %}">
+			<td>
+				{% trans "Support for PHP ZLib (PHP compression)" %}
+				<p class="small">{% trans "If you have ZLib compression module in PHP, Creamture can compress the output configuring config.php file parameter" %}.</p>
+			</td>
+			<td class="center">
+				{% if config['zlib_enabled']  %}
+					<i class="icon-ok"></i>
+				{% else %}
+					<i class="icon-remove"></i>
+				{% endif %}
+			</td>
+		</tr>
+		<tr class="{% if not config['zlib_compression_enabled'] %}warning{% endif %}">
+			<td>
+				{% trans "ZLib Compression enabled" %}
+				<p class="small">{% trans "If ZLib Compression is enabled in php.ini then all php output is compressed. That is not neccessary because Creamture compress its output if PHP ZLib support is enabled." %}.</p>
+			</td>
+			<td class="center">
+				{% if config['zlib_compression_enabled'] %}
+					<i class="icon-ok"></i>
+				{% else %}
+					<i class="icon-remove"></i>
+				{% endif %}
+			</td>
+		</tr>
+		<tr class="{% if not config['gettext_enabled'] %}warning{% endif %}">
+			<td>
+				{% trans "Support of i18n gettext" %}
+				<p class="small">{% trans "You need PHP gettext library enabled if you want i18n multilanguage support. That is not neccessary if you want to use the original CodeIgniter language PHP array files" %}.</p>
+			</td>
+			<td class="center">
+				{% if config['gettext_enabled'] %}
+					<i class="icon-ok"></i>
+				{% else %}
+					<i class="icon-remove"></i>
+				{% endif %}
+			</td>
+		</tr>
+	</table>
+{% endblock %}
