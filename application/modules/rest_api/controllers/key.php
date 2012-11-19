@@ -13,7 +13,7 @@
 */
 
 // This can be removed if you use __autoload() in config.php
-require(APPPATH.'/modules/api/libraries/REST_Controller.php');
+require(APPPATH.'/modules/rest_api/libraries/REST_Controller.php');
 
 class Key extends REST_Controller
 {
