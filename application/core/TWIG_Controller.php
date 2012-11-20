@@ -3,11 +3,9 @@
 class TWIG_Controller extends MX_Controller{
 	// protected $twig_debug;
 	protected $assets_path;
-	var $is_win;
 
 	public function __construct(){
-		parent::__construct();		
-		$this->is_win = preg_match('/^win/i', PHP_OS);
+		parent::__construct();
 		$this->load->spark('twiggy/0.8.5');
 
 		$this->load->spark('assets/1.5.1');
@@ -64,8 +62,8 @@ class TWIG_Controller extends MX_Controller{
 
 	private function getRelativePath($from, $to)
 	{
-	   $from = explode(($this->is_win)?'\\':'/', $from);
-	   $to = explode(($this->is_win)?'\\':'/', $to);
+	   $from = explode(DIRECTORY_SEPARATOR, $from);
+	   $to = explode(DIRECTORY_SEPARATOR, $to);
 	   foreach($from as $depth => $dir)
 	   {
 
@@ -87,7 +85,7 @@ class TWIG_Controller extends MX_Controller{
 	    {
 	        array_unshift($to,'..');
 	    }
-	    $result = implode(($this->is_win)?'\\':'/', $to);
+	    $result = implode(DIRECTORY_SEPARATOR, $to);
 	    return $result;
 	}
 }

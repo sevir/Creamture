@@ -54,7 +54,6 @@ class Install extends TWIG_Controller {
 
 		$this->display($type.'_view', array(
 			'config'=>$this->_getConfig(),
-			'assets'=>$this->assets,
     		'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
     		'install_path'=>auto_link($this->config->item('index_page').'/../../install')
 		) );
@@ -62,7 +61,6 @@ class Install extends TWIG_Controller {
 
 	public function database(){
 		$this->display('database_view', array(
-			'assets'=>$this->assets,
 			'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
     		'install_path'=>auto_link($this->config->item('index_page').'/../../install')
 		));
