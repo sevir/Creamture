@@ -69,6 +69,7 @@ function generateTwigGettext()
         require_once APPPATH.'../sparks/twiggy/0.8.5/helpers/twiggy_helper.php';
         $CI->load->spark('assets/1.5.1');
         $twig->addFunction('array', new Twig_Function_Function('array'));
+        $twig->addFunction('phpinfo', new Twig_Function_Function('phpinfo'));
         $twig->addFunction('assets_css_group', new Twig_Function_Function('assets_css_group'));
         $twig->addFunction('assets_js_group', new Twig_Function_Function('assets_js_group'));
         $twig->addFunction('assets_img', new Twig_Function_Function('assets_img'));
