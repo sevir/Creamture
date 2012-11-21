@@ -37,8 +37,9 @@ function loadMigrations(){
     $CI = & get_instance();
 
     $CI->load->config('migrations/migrations_config');
-
     $CI->load->library('migrations/migration_library');
+
+    $m = array();
     if (!$CI->config->item('automatic_migrations')){
         $m = $CI->migration_library->load();
     }
