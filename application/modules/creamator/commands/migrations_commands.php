@@ -21,7 +21,7 @@ function createMigration($desc, $env = NULL ){
 
     $CI->load->helper('file');
     $filedesc = str_replace(array(' ','.',',','?'), '', $desc);
-    $filename = date('YmdHms').'_'.$filedesc.'.'.(($env)?$env.'.':'').$CI->config->item('migrations_extension');
+    $filename = date('YmdHis').'_'.$filedesc.'.'.(($env)?$env.'.':'').$CI->config->item('migrations_extension');
     if(!write_file(
         APPPATH.$CI->config->item('migrations_folder').
         DIRECTORY_SEPARATOR.$filename,
