@@ -62,8 +62,8 @@ class TWIG_Controller extends MX_Controller{
 
 	private function getRelativePath($from, $to)
 	{
-	   $from = explode('/', $from);
-	   $to = explode('/', $to);
+	   $from = explode(DIRECTORY_SEPARATOR, $from);
+	   $to = explode(DIRECTORY_SEPARATOR, $to);
 	   foreach($from as $depth => $dir)
 	   {
 
@@ -85,7 +85,7 @@ class TWIG_Controller extends MX_Controller{
 	    {
 	        array_unshift($to,'..');
 	    }
-	    $result = implode('/', $to);
+	    $result = implode(DIRECTORY_SEPARATOR, $to);
 	    return $result;
 	}
 }
