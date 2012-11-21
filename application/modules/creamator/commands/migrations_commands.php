@@ -46,6 +46,8 @@ function loadMigrations(){
     foreach ($m as $fileloaded) {
         println(_('Migration file loaded: ').$fileloaded);
     }
+    if (empty($m))
+        println(_('No available migrations...'));
     println(_('Migrations finished'));
 }
 

@@ -1,5 +1,9 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+* Migration support library for Creamture
+*/
+
 class migration_library {
 
 	var $CI; //CodeIgniter instance
@@ -11,7 +15,7 @@ class migration_library {
 
 		$this->CI->load->config('migrations_config');
 		if ($this->CI->config->item('automatic_migrations')){
-			$this->load();
+			$this->load(); //load migrations automatically with library instance
 		}
 	}
 
@@ -19,7 +23,7 @@ class migration_library {
 		$this->CI->load->helper('directory');
 		$dbfiles = directory_map(APPPATH.$this->CI->config->item('migrations_folder'),1);
 		$migrations_loaded = array();
-
+		//sort files by datetimestamp
 		sort($dbfiles, SORT_NUMERIC);
 
 		$this->CI->load->model('migration_model');
@@ -27,18 +31,32 @@ class migration_library {
 
 		$ignore_file = ($lastfile == NULL)?FALSE:TRUE;
 		foreach ($dbfiles as $file) {
-			$filename = explode('.', $file);
+			$filename = explode('.', $file); //cut file name fields
 			if ($ignore_file){				
 				$ignore_file = ($filename[0] != $lastfile);
 			}else{
-				$this->CI->migration_model->insertMigration($filename[0]);
+				$stat = TRUE;
 				if ($filename[1] == $this->CI->config->item('migrations_extension')
 					|| $filename[1] == ENVIRONMENT){
-					array_push($migrations_loaded, $file);
-					$this->importSql(APPPATH.$this->CI->config->item('migrations_folder').DIRECTORY_SEPARATOR.$file);
+					
+					if($this->CI->config->item('import_with_mysql_exec'))
+						$stat = $this->importMySQL(APPPATH.$this->CI->config->item('migrations_folder').DIRECTORY_SEPARATOR.$file);
+					else
+						$stat = $this->importSql(APPPATH.$this->CI->config->item('migrations_folder').DIRECTORY_SEPARATOR.$file);
+
+					if($stat)
+						array_push($migrations_loaded, $file);
 				}
+				if($stat){
+					$this->CI->migration_model->insertMigration($filename[0]);
+				}					
 			}
 		}
+
+		if ($this->CI->config->item('optimize_on_migration')){
+			$this->CI->load->dbutil();
+			$this->CI->dbutil->optimize_database();	
+		}		
 
 		return $migrations_loaded;
 	}
@@ -46,16 +64,39 @@ class migration_library {
 	public function importSql($filename){
 		$sql = $this->CI->load->file($filename, TRUE);
 		$sql_lines = explode(';', $sql);
+		$stat = TRUE;
 
+		$this->CI->db->query('SET FOREIGN_KEY_CHECKS = 0');
 		foreach ($sql_lines as $query)
 		{
-			$q = str_replace(array("\n"),'',$query);
-			if (! empty($q)){
-				$this->CI->db->query('SET FOREIGN_KEY_CHECKS = 0');
-				$this->CI->db->query($q);
-				$this->CI->db->query('SET FOREIGN_KEY_CHECKS = 1');
+			$q = str_replace(array("\n"),' ',$query);
+			if ($q != ' '){
+				if (! $this->CI->db->query($q)){
+					echo "\n"._('ERROR Last Query: ').$this->CI->db->last_query()."\n";
+					$stat = FALSE;
+				}
 			}			
 		}
+		$this->CI->db->query('SET FOREIGN_KEY_CHECKS = 1');
+		return $stat;
+	}
+
+	public function importMySQL($filename){
+		$stat = TRUE;
+		include (APPPATH.'config/database.php');
+		
+		$migration_command = sprintf("mysql --user=%s --password=%s --host=%s %s < $filename", 
+			$db[$active_group]['username'], 
+			$db[$active_group]['password'], 
+			$db[$active_group]['hostname'], 
+			$db[$active_group]['database']);
+		system($migration_command, $migration_status);
+		if ($migration_status != 0){
+			echo "\n"._('ERROR! MIGRATION FAILED! You now have a possible inconsistent database, because it did pass the initial test, but failed when the migration was actually run. You need to find out what statements of the migration did work, and bring it back to the state of the previous migration. For the record, the migration file is: ').$filename."\n";
+			$stat = FALSE;
+		}
+
+		return $stat;
 	}
 }
 
