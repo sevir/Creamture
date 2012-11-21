@@ -70,7 +70,7 @@ class migration_library {
 		foreach ($sql_lines as $query)
 		{
 			$q = str_replace(array("\n"),' ',$query);
-			if ($q != ' '){
+			if (preg_match('\w+', $q)){
 				if (! $this->CI->db->query($q)){
 					echo "\n"._('ERROR Last Query: ').$this->CI->db->last_query()."\n";
 					$stat = FALSE;
