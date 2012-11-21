@@ -13,7 +13,7 @@
 
 		function getLastMigration(){
 			$r = $this->db->select('name')->from($this->config->item('migrations_table'))->order_by('id', 'desc')->limit(1)->get()->row();
-			return $r->name;
+			return ($r ? $r->name:NULL);
 		}
 
 		function insertMigration($name){
