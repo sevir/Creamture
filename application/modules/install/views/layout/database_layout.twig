@@ -1,0 +1,18 @@
+{% extends "layout/install_layout.twig" %}
+
+{% block content %}
+<div class="span2">
+	<ul class="dropdown-menu mainmenu" role="menu" aria-labelledby="dropdownMenu" data-spy="affix" data-offset-top="200">
+		<li class="{{ getActualSection('profiles','menuactive')}}"><a href="?type=profiles"><i class="icon-wrench"></i> {% trans "Database profiles" %}</a></li>
+		<li class="{{ getActualSection('table-models','menuactive')}}"><a href="?type=table-models"><i class="icon-edit"></i> {% trans "Table models" %}</a></li>
+		<li class="{{ getActualSection('migrations','menuactive')}}"><a href="?type=migrations"><i class="icon-tasks"></i> {% trans "Migrations" %}</a></li>
+	</ul>
+</div>
+<div class="span10">
+	<div class="inner-content">
+		{% block innercontent %}
+		    
+		{% endblock %}
+	</div>
+</div>
+{% endblock %}

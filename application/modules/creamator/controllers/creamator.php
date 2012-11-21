@@ -70,6 +70,8 @@ class Creamator extends CI_Controller {
 					$this->help($command);
 				}else{
 					//Run the command
+					println('Running command: '.$command);
+					println('');
 					call_user_func_array($command, $params);
 					println('');
 				}
