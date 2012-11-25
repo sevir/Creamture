@@ -1,7 +1,6 @@
 <?php  if (! defined('BASEPATH')) exit('No direct script access allowed');
 
 class TWIG_Controller extends MX_Controller{
-	// protected $twig_debug;
 	protected $assets_path;
 
 	public function __construct(){

@@ -1,0 +1,17 @@
+{% extends "layout/database_layout.twig" %}
+
+{% block innercontent %}
+<h2>{% trans "Database configuration" %}</h2>
+<p>{% trans "Configure your different database profiles" %}</p>
+<form method="POST" id="dbprofiles">
+	<p>
+		<label>{% trans "Select the default database profile" %}: 
+			<select name="active_group">
+				{% for profile in data['dbprofiles'] %}
+				    <option {% if data['active_group']==profile %}selected="selected"{% endif %} value="{{ profile }}">{{ profile }}</option>
+				{% endfor %}
+			</select>
+		</label>
+	</p>
+</form>
+{% endblock %}

@@ -50,6 +50,7 @@ class Twiggy
 		$this->CI =& get_instance();
 
 		$this->_config = $this->CI->config->item('twiggy');
+		$this->_debug = $this->_config['environment']['debug'];
 
 		$this->_themes_base_dir = ($this->_config['include_apppath']) ? APPPATH . $this->_config['themes_base_dir'] : $this->_config['themes_base_dir'];
 		$this->_set_template_locations($this->_config['default_theme']);
@@ -69,6 +70,9 @@ class Twiggy
 		
 		$this->_twig = new Twig_Environment($this->_twig_loader, $this->_config['environment']);
 		$this->_twig->setLexer(new Twig_Lexer($this->_twig, $this->_config['delimiters']));
+		if($this->_debug){
+			$this->_twig->addExtension(new Twig_Extension_Debug());
+		}
 
 		// Initialize defaults
 		$this->theme($this->_config['default_theme'])
@@ -443,8 +447,12 @@ class Twiggy
 		// force auto-reload to always have the latest version of the template
 		$twig = new Twig_Environment($loader, array(
 		    'cache' => $tmpDir,
-		    'auto_reload' => true
+		    'auto_reload' => true,
+		    'debug'=>$this->_debug
 		));
+		if($this->_debug){
+			$twig->addExtension(new Twig_Extension_Debug());
+		}
 		$twig->addExtension(new Twig_Extensions_Extension_I18n());
 		// configure Twig the way you want
 
@@ -463,6 +471,10 @@ class Twiggy
 			'cache' => $this->_cache_dir,
 			'debug' => $this->_debug,
 		));
+
+		if($this->_debug){
+			$twig->addExtension(new Twig_Extension_Debug());
+		}
 
 		if(function_exists('gettext'))
 		{

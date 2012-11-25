@@ -82,7 +82,7 @@ $config['twiggy']['delimiters'] = array
 */
 
 $config['twiggy']['environment']['cache']              	= FALSE;
-$config['twiggy']['environment']['debug']              	= FALSE;
+$config['twiggy']['environment']['debug']              	= TRUE;
 $config['twiggy']['environment']['charset']            	= 'utf-8';
 $config['twiggy']['environment']['base_template_class']	= 'Twig_Template';
 $config['twiggy']['environment']['auto_reload']        	= NULL;

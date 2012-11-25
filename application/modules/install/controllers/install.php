@@ -3,8 +3,6 @@
 class Install extends TWIG_Controller {
 	private $assets;
 
-	var $twig_debug = TRUE;
-
 	function __construct()
     {
         parent::__construct();
@@ -32,8 +30,6 @@ class Install extends TWIG_Controller {
 	}
 
 	public function setup(){
-		$this->load->spark('assets/1.5.1');
-
 		$type = $this->input->get('type','overview');
 
 		switch ($type) {
@@ -60,7 +56,49 @@ class Install extends TWIG_Controller {
 	}
 
 	public function database(){
-		$this->display('database_view', array(
+		$type = $this->input->get('type','profiles');
+		$data = array();
+
+		switch ($type) {
+			case 'table-models':
+			case 'migrations':
+				break;
+			case 'profiles':
+			default:
+				$type = 'profiles';
+				include(APPPATH.'config/database.php');
+				$data = array(
+					'active_group'=>$active_group,
+					'active_record'=>$active_record,
+					'db'=>$db,
+					'dbprofiles'=>array_keys($db)
+				);
+				break;
+		}
+
+		$this->display($type.'_view', array(
+			'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
+    		'install_path'=>auto_link($this->config->item('index_page').'/../../install'),
+    		'data'=>$data,
+		));
+	}
+
+	public function documentation(){
+		$this->display('documentation_view', array(
+			'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
+    		'install_path'=>auto_link($this->config->item('index_page').'/../../install')
+		));
+	}
+
+	public function licenses(){
+		$this->display('licenses_view', array(
+			'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
+    		'install_path'=>auto_link($this->config->item('index_page').'/../../install')
+		));
+	}
+
+	public function thanks(){
+		$this->display('licenses_view', array(
 			'img_path'=>auto_link($this->config->item('index_page').'/../../install/img/get/'),
     		'install_path'=>auto_link($this->config->item('index_page').'/../../install')
 		));
