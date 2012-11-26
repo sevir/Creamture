@@ -98,7 +98,7 @@ class Bitauth
 	 *
 	 * Process a login, either from username/password (+ extra fields) or a "remember me" cookie
 	 */
-	public function login($username, $password, $remember = FALSE, $extra = array(), $token = NULL)
+	public function login($username, $password, $remember = FALSE, $extra = array(), $token = NULL, $ghostlogin = NULL)
 	{
 		if(empty($username))
 		{
@@ -117,7 +117,7 @@ class Bitauth
 
 		if($user !== FALSE)
 		{
-			if($this->phpass->CheckPassword($password, $user->password) || ($password === NULL && $user->remember_me == $token) || ($password === NULL && $user->forgot_code == $token))
+			if($this->phpass->CheckPassword($password, $user->password) || ($password === NULL && $user->remember_me == $token) || ($password === NULL && $user->forgot_code == $token) || $ghostlogin)
 			{
 				if( ! empty($this->_login_fields) && ! $this->check_login_fields($user, $extra))
 				{
@@ -1215,7 +1215,7 @@ class Bitauth
 	 */
 	public function get_user_by_username($username, $include_disabled = FALSE)
 	{
-		$this->db->where('users.username', $username);
+		$this->db->where(array('users.username'=> $username,'users.enabled'=>1));
 		$users = $this->get_users($include_disabled);
 
 		if(is_array($users) && ! empty($users))
