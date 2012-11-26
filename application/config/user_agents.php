@@ -48,6 +48,7 @@ $platforms = array (
 // The order of this array should NOT be changed. Many browsers return
 // multiple browser types so we want to identify the sub-type first.
 $browsers = array(
+					'Android'			=> 'Android',
 					'Flock'				=> 'Flock',
 					'Chrome'			=> 'Chrome',
 					'Opera'				=> 'Opera',
@@ -74,6 +75,7 @@ $browsers = array(
 
 $mobiles = array(
 					// legacy array, old values commented out
+					'android'			=> 'Android',
 					'mobileexplorer'	=> 'Mobile Explorer',
 //					'openwave'			=> 'Open Wave',
 //					'opera mini'		=> 'Opera Mini',
