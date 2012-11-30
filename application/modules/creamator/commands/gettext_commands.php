@@ -181,7 +181,7 @@ function generateGettext($directory){
     foreach ($lang_folders as $lang_folder) {
         $output = array();
 
-        if(substr_in_array($last_po_files, $lang_folder) === FALSE){
+        if(substr_in_array($last_po_files, $lang_folder) !== FALSE){
             //compile mo file
             exec(
                 'msgfmt -cv -o '.$CI->config->item('locale_dir').$lang_folder.

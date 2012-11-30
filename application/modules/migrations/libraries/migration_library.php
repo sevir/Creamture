@@ -13,7 +13,7 @@ class migration_library {
 		$this->CI =& get_instance();
 		$this->CI->load->model('migrations/migration_model');
 
-		$this->CI->load->config('migrations_config');
+		$this->CI->load->config('migrations/migrations_config');
 		if ($this->CI->config->item('automatic_migrations')){
 			$this->load(); //load migrations automatically with library instance
 		}
@@ -69,15 +69,16 @@ class migration_library {
 		$this->CI->db->query('SET FOREIGN_KEY_CHECKS = 0');
 		foreach ($sql_lines as $query)
 		{
-			$q = str_replace(array("\n"),' ',$query);
-			if (preg_match('/\w+/', $q)){
+			$q = str_replace(array("\n"),' ', preg_replace('/(#.*)|(--.*)/', '', $query) );
+			if (preg_match('/\w+/', $q)){				
 				if (! $this->CI->db->query($q)){
 					echo "\n"._('ERROR Last Query: ').$this->CI->db->last_query()."\n";
 					$stat = FALSE;
 				}
-			}			
+			}
 		}
 		$this->CI->db->query('SET FOREIGN_KEY_CHECKS = 1');
+
 		return $stat;
 	}
 
