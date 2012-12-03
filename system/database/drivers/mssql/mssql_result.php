@@ -1,52 +1,40 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.2.4 or newer
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the Open Software License version 3.0
- *
- * This source file is subject to the Open Software License (OSL 3.0) that is
- * bundled with this package in the files license.txt / license.rst.  It is
- * also available through the world wide web at this URL:
- * http://opensource.org/licenses/OSL-3.0
- * If you did not receive a copy of the license and are unable to obtain it
- * through the world wide web, please send an email to
- * licensing@ellislab.com so we can send you a copy immediately.
+ * An open source application development framework for PHP 5.1.6 or newer
  *
  * @package		CodeIgniter
- * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2012, EllisLab, Inc. (http://ellislab.com/)
- * @license		http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author		ExpressionEngine Dev Team
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
+ * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
  * @filesource
  */
 
+// ------------------------------------------------------------------------
+
 /**
- * MSSQL Result Class
+ * MS SQL Result Class
  *
  * This class extends the parent result class: CI_DB_result
  *
  * @category	Database
- * @author		EllisLab Dev Team
+ * @author		ExpressionEngine Dev Team
  * @link		http://codeigniter.com/user_guide/database/
- * @since	1.3
  */
 class CI_DB_mssql_result extends CI_DB_result {
 
 	/**
 	 * Number of rows in the result set
 	 *
-	 * @return	int
+	 * @access	public
+	 * @return	integer
 	 */
-	public function num_rows()
+	function num_rows()
 	{
-		return is_int($this->num_rows)
-			? $this->num_rows
-			: $this->num_rows = @mssql_num_rows($this->result_id);
+		return @mssql_num_rows($this->result_id);
 	}
 
 	// --------------------------------------------------------------------
@@ -54,9 +42,10 @@ class CI_DB_mssql_result extends CI_DB_result {
 	/**
 	 * Number of fields in the result set
 	 *
-	 * @return	int
+	 * @access	public
+	 * @return	integer
 	 */
-	public function num_fields()
+	function num_fields()
 	{
 		return @mssql_num_fields($this->result_id);
 	}
@@ -68,9 +57,10 @@ class CI_DB_mssql_result extends CI_DB_result {
 	 *
 	 * Generates an array of column names
 	 *
+	 * @access	public
 	 * @return	array
 	 */
-	public function list_fields()
+	function list_fields()
 	{
 		$field_names = array();
 		while ($field = mssql_fetch_field($this->result_id))
@@ -88,19 +78,20 @@ class CI_DB_mssql_result extends CI_DB_result {
 	 *
 	 * Generates an array of objects containing field meta-data
 	 *
+	 * @access	public
 	 * @return	array
 	 */
-	public function field_data()
+	function field_data()
 	{
 		$retval = array();
 		while ($field = mssql_fetch_field($this->result_id))
 		{
-			$F		= new stdClass();
-			$F->name	= $field->name;
-			$F->type	= $field->type;
+			$F				= new stdClass();
+			$F->name		= $field->name;
+			$F->type		= $field->type;
 			$F->max_length	= $field->max_length;
 			$F->primary_key = 0;
-			$F->default	= '';
+			$F->default		= '';
 
 			$retval[] = $F;
 		}
@@ -113,9 +104,9 @@ class CI_DB_mssql_result extends CI_DB_result {
 	/**
 	 * Free the result
 	 *
-	 * @return	void
+	 * @return	null
 	 */
-	public function free_result()
+	function free_result()
 	{
 		if (is_resource($this->result_id))
 		{
@@ -129,13 +120,14 @@ class CI_DB_mssql_result extends CI_DB_result {
 	/**
 	 * Data Seek
 	 *
-	 * Moves the internal pointer to the desired offset. We call
+	 * Moves the internal pointer to the desired offset.  We call
 	 * this internally before fetching results to make sure the
 	 * result set starts at zero
 	 *
-	 * @return	bool
+	 * @access	private
+	 * @return	array
 	 */
-	protected function _data_seek($n = 0)
+	function _data_seek($n = 0)
 	{
 		return mssql_data_seek($this->result_id, $n);
 	}
@@ -147,9 +139,10 @@ class CI_DB_mssql_result extends CI_DB_result {
 	 *
 	 * Returns the result set as an array
 	 *
+	 * @access	private
 	 * @return	array
 	 */
-	protected function _fetch_assoc()
+	function _fetch_assoc()
 	{
 		return mssql_fetch_assoc($this->result_id);
 	}
@@ -161,28 +154,16 @@ class CI_DB_mssql_result extends CI_DB_result {
 	 *
 	 * Returns the result set as an object
 	 *
-	 * @param	string
+	 * @access	private
 	 * @return	object
 	 */
-	protected function _fetch_object($class_name = 'stdClass')
+	function _fetch_object()
 	{
-		$row = @mssql_fetch_object($this->result_id);
-
-		if ($class_name === 'stdClass' OR ! $row)
-		{
-			return $row;
-		}
-
-		$class_name = new $class_name();
-		foreach ($row as $key => $value)
-		{
-			$class_name->$key = $value;
-		}
-
-		return $class_name;
+		return mssql_fetch_object($this->result_id);
 	}
 
 }
+
 
 /* End of file mssql_result.php */
 /* Location: ./system/database/drivers/mssql/mssql_result.php */

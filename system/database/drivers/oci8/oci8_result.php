@@ -1,29 +1,19 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.2.4 or newer
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the Open Software License version 3.0
- *
- * This source file is subject to the Open Software License (OSL 3.0) that is
- * bundled with this package in the files license.txt / license.rst.  It is
- * also available through the world wide web at this URL:
- * http://opensource.org/licenses/OSL-3.0
- * If you did not receive a copy of the license and are unable to obtain it
- * through the world wide web, please send an email to
- * licensing@ellislab.com so we can send you a copy immediately.
+ * An open source application development framework for PHP 5.1.6 or newer
  *
  * @package		CodeIgniter
- * @author		EllisLab Dev Team
- * @copyright   Copyright (c) 2008 - 2012, EllisLab, Inc. (http://ellislab.com/)
- * @license		http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author		ExpressionEngine Dev Team
+ * @copyright   Copyright (c) 2008 - 2011, EllisLab, Inc.
+ * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
  * @filesource
  */
+
+// ------------------------------------------------------------------------
 
 /**
  * oci8 Result Class
@@ -31,32 +21,37 @@
  * This class extends the parent result class: CI_DB_result
  *
  * @category	Database
- * @author		EllisLab Dev Team
+ * @author		ExpressionEngine Dev Team
  * @link		http://codeigniter.com/user_guide/database/
- * @since	1.4.1
  */
 class CI_DB_oci8_result extends CI_DB_result {
 
 	public $stmt_id;
 	public $curs_id;
 	public $limit_used;
-	public $commit_mode;
 
 	/**
-	 * Constructor
+	 * Number of rows in the result set.
 	 *
-	 * @param	object
-	 * @return	void
+	 * Oracle doesn't have a graceful way to retun the number of rows
+	 * so we have to use what amounts to a hack.
+	 *
+	 * @return  integer
 	 */
-	public function __construct(&$driver_object)
+	public function num_rows()
 	{
-		parent::__construct($driver_object);
+		if ($this->num_rows === 0 && count($this->result_array()) > 0)
+		{
+			$this->num_rows = count($this->result_array());
+			@oci_execute($this->stmt_id);
 
-		$this->stmt_id = $driver_object->stmt_id;
-		$this->curs_id = $driver_object->curs_id;
-		$this->limit_used = $driver_object->limit_used;
-		$this->commit_mode =& $driver_object->commit_mode;
-		$driver_object->stmt_id = FALSE;
+			if ($this->curs_id)
+			{
+				@oci_execute($this->curs_id);
+			}
+		}
+
+		return $this->num_rows;
 	}
 
 	// --------------------------------------------------------------------
@@ -64,14 +59,20 @@ class CI_DB_oci8_result extends CI_DB_result {
 	/**
 	 * Number of fields in the result set
 	 *
-	 * @return	int
+	 * @access  public
+	 * @return  integer
 	 */
 	public function num_fields()
 	{
 		$count = @oci_num_fields($this->stmt_id);
 
 		// if we used a limit we subtract it
-		return ($this->limit_used) ? $count - 1 : $count;
+		if ($this->limit_used)
+		{
+			$count = $count - 1;
+		}
+
+		return $count;
 	}
 
 	// --------------------------------------------------------------------
@@ -81,6 +82,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	 *
 	 * Generates an array of column names
 	 *
+	 * @access	public
 	 * @return	array
 	 */
 	public function list_fields()
@@ -100,17 +102,18 @@ class CI_DB_oci8_result extends CI_DB_result {
 	 *
 	 * Generates an array of objects containing field meta-data
 	 *
-	 * @return	array
+	 * @access  public
+	 * @return  array
 	 */
 	public function field_data()
 	{
 		$retval = array();
 		for ($c = 1, $fieldCount = $this->num_fields(); $c <= $fieldCount; $c++)
 		{
-			$F		= new stdClass();
-			$F->name	= oci_field_name($this->stmt_id, $c);
-			$F->type	= oci_field_type($this->stmt_id, $c);
-			$F->max_length	= oci_field_size($this->stmt_id, $c);
+			$F			= new stdClass();
+			$F->name		= oci_field_name($this->stmt_id, $c);
+			$F->type		= oci_field_type($this->stmt_id, $c);
+			$F->max_length		= oci_field_size($this->stmt_id, $c);
 
 			$retval[] = $F;
 		}
@@ -123,7 +126,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	/**
 	 * Free the result
 	 *
-	 * @return	void
+	 * @return	null
 	 */
 	public function free_result()
 	{
@@ -131,17 +134,6 @@ class CI_DB_oci8_result extends CI_DB_result {
 		{
 			oci_free_statement($this->result_id);
 			$this->result_id = FALSE;
-		}
-
-		if (is_resource($this->stmt_id))
-		{
-			oci_free_statement($this->stmt_id);
-		}
-
-		if (is_resource($this->curs_id))
-		{
-			oci_cancel($this->curs_id);
-			$this->curs_id = NULL;
 		}
 	}
 
@@ -152,7 +144,8 @@ class CI_DB_oci8_result extends CI_DB_result {
 	 *
 	 * Returns the result set as an array
 	 *
-	 * @return	array
+	 * @access  protected
+	 * @return  array
 	 */
 	protected function _fetch_assoc()
 	{
@@ -167,27 +160,37 @@ class CI_DB_oci8_result extends CI_DB_result {
 	 *
 	 * Returns the result set as an object
 	 *
-	 * @param	string
-	 * @return	object
+	 * @access  protected
+	 * @return  object
 	 */
-	protected function _fetch_object($class_name = 'stdClass')
+	protected function _fetch_object()
 	{
-		$row = ($this->curs_id)
-			? oci_fetch_object($this->curs_id)
-			: oci_fetch_object($this->stmt_id);
+		$id = ($this->curs_id) ? $this->curs_id : $this->stmt_id;
+		return @oci_fetch_object($id);
+	}
 
-		if ($class_name === 'stdClass' OR ! $row)
+	// --------------------------------------------------------------------
+
+	/**
+	 * Query result.  "array" version.
+	 *
+	 * @access  public
+	 * @return  array
+	 */
+	public function result_array()
+	{
+		if (count($this->result_array) > 0)
 		{
-			return $row;
+			return $this->result_array;
 		}
 
-		$class_name = new $class_name();
-		foreach ($row as $key => $value)
+		$row = NULL;
+		while ($row = $this->_fetch_assoc())
 		{
-			$class_name->$key = $value;
+			$this->result_array[] = $row;
 		}
 
-		return $class_name;
+		return $this->result_array;
 	}
 
 	// --------------------------------------------------------------------
@@ -195,59 +198,20 @@ class CI_DB_oci8_result extends CI_DB_result {
 	/**
 	 * Data Seek
 	 *
-	 * Moves the internal pointer to the desired offset. We call
+	 * Moves the internal pointer to the desired offset.  We call
 	 * this internally before fetching results to make sure the
-	 * result set starts at zero.
+	 * result set starts at zero
 	 *
-	 * Oracle's PHP extension doesn't have an easy way of doing this
-	 * and the only workaround is to (re)execute the statement or cursor
-	 * in order to go to the first (zero) index of the result set.
-	 * Then, we would need to "dummy" fetch ($n - 1) rows to get to the
-	 * right one.
-	 *
-	 * This is as ridiculous as it sounds and it's the reason why every
-	 * other method that is fetching data tries to use an already "cached"
-	 * result set. Keeping this just in case it becomes needed at
-	 * some point in the future, but it will only work for resetting the
-	 * pointer to zero.
-	 *
-	 * @return	bool
+	 * @access	protected
+	 * @return	array
 	 */
-	protected function _data_seek()
+	protected function _data_seek($n = 0)
 	{
-		/* The PHP manual says that if OCI_NO_AUTO_COMMIT mode
-		 * is used, and oci_rollback() and/or oci_commit() are
-		 * not subsequently called - this will cause an unnecessary
-		 * rollback to be triggered at the end of the script execution.
-		 *
-		 * Therefore we'll try to avoid using that mode flag
-		 * if we're not currently in the middle of a transaction.
-		 */
-		if ($this->commit_mode !== OCI_COMMIT_ON_SUCCESS)
-		{
-			$result = @oci_execute($this->stmt_id, $this->commit_mode);
-		}
-		else
-		{
-			$result = @oci_execute($this->stmt_id);
-		}
-
-		if ($result && $this->curs_id)
-		{
-			if ($this->commit_mode !== OCI_COMMIT_ON_SUCCESS)
-			{
-				return @oci_execute($this->curs_id, $this->commit_mode);
-			}
-			else
-			{
-				return @oci_execute($this->curs_id);
-			}
-		}
-
-		return $result;
+		return FALSE; // Not needed
 	}
 
 }
+
 
 /* End of file oci8_result.php */
 /* Location: ./system/database/drivers/oci8/oci8_result.php */
