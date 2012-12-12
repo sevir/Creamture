@@ -5,7 +5,6 @@
  */
 load_gettext('auto');
 
-
 /**
  * Set language
  *
@@ -17,35 +16,62 @@ function load_gettext($language)
 
   if( ! $CI->input->is_cli_request())
   {
-    $CI->config->load('language');
-    $CI->load->library('session');
+    $CI->config->load('language_conf', TRUE);
 
-    $locales_dir = $CI->config->item('locale_dir');
-    $domain = $CI->config->item('domain');
+    $locales_dir = $CI->config->item('locale_dir', 'language_conf');
+    $domain = $CI->config->item('domain','language_conf');
 
     // Try auto-detection if asked for. Set default language if it fails
     if($language === 'auto')
     {
+      $CI->load->library('session');
+
       if ($CI->session->userdata('locale')) {
         $language = $CI->session->userdata('locale');
       } else {
         $language = $CI->lang->autodetect();
-        $language = $language ? $language : $CI->config->item('default_locale','language');
-        $CI->session->set_userdata('locale', $language);
       }
     }
-
-    putenv('LANGUAGE='.$language);
-    putenv('LANG='.$language);
-    putenv('LC_ALL='.$language);
-    putenv('LC_MESSAGES='.$language);
-    setlocale(LC_ALL,$language);
-    setlocale(LC_CTYPE,$language);
-
-    bindtextdomain($domain,$locales_dir);
-    bind_textdomain_codeset($domain, 'UTF-8');
-    textdomain($domain);
   }
+
+  if ($language && ! in_array($language, $CI->config->item('available_locales','language_conf')) ){
+    foreach ($CI->config->item('language_aliases','language_conf') as $alias => $aliases) {
+      if ( substr_in_array($language, $aliases, TRUE) === 0 ){
+        $language = $alias;
+        break;
+      }
+    }
+  }else if(!$language){
+    $language = $CI->config->item('default_locale','language_conf');
+  }
+
+  if ( ! $CI->input->is_cli_request() )
+    $CI->session->set_userdata('locale', $language);  
+
+  putenv('LANGUAGE='.$language);
+  putenv('LANG='.$language);
+  putenv('LC_ALL='.$language);
+  putenv('LC_MESSAGES='.$language);
+  setlocale(LC_ALL,$language);
+  setlocale(LC_CTYPE,$language);
+
+  bindtextdomain($domain,$locales_dir);
+  bind_textdomain_codeset($domain, $CI->config->item('encoding','language_conf'));
+  textdomain($domain);
+}
+
+/**
+ * Similar to in_array but searching substrings
+ * @param string    Text to find
+ * @param array     Array to search into
+ * @param inverse   Search $needle in the $haystack elements or search the elements substring in needle
+ */
+function substr_in_array($needle, $haystack, $inverse=FALSE){
+  foreach ($haystack as $v) {
+    if( ($r = ($inverse)?strpos($needle, $v):strpos($v, $needle) ) !== FALSE)
+      return $r;
+  }
+  return false;
 }
 
 
