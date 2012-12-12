@@ -34,7 +34,7 @@ function load_gettext($language)
 
   if ($language && ! in_array($language, $CI->config->item('available_locales','language_conf')) ){
     foreach ($CI->config->item('language_aliases','language_conf') as $alias => $aliases) {
-      if ( substr_in_array($language, $aliases, TRUE) === 0 ){
+      if ( sub_in_array($language, $aliases, TRUE) === 0 ){
         $language = $alias;
         break;
       }
@@ -63,7 +63,7 @@ function load_gettext($language)
  * @param array     Array to search into
  * @param inverse   Search $needle in the $haystack elements or search the elements substring in needle
  */
-function substr_in_array($needle, $haystack, $inverse=FALSE){
+function sub_in_array($needle, $haystack, $inverse=FALSE){
   foreach ($haystack as $v) {
     if( ($r = ($inverse)?strpos($needle, $v):strpos($v, $needle) ) !== FALSE)
       return $r;
