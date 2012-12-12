@@ -5,6 +5,7 @@
  */
 load_gettext('auto');
 
+
 /**
  * Set language
  *
@@ -29,11 +30,11 @@ function load_gettext($language)
         $language = $CI->session->userdata('locale');
       } else {
         $language = $CI->lang->autodetect();
-        $language = ($language && in_array($language, $this->config->item('available_locales'))) ? $language : $CI->config->item('default_locale','language');
+        $language = $language ? $language : $CI->config->item('default_locale','language');
         $CI->session->set_userdata('locale', $language);
       }
     }
-    
+
     putenv('LANGUAGE='.$language);
     putenv('LANG='.$language);
     putenv('LC_ALL='.$language);
