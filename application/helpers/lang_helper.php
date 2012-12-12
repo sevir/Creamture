@@ -13,19 +13,17 @@ load_gettext('auto');
 function load_gettext($language)
 {
   $CI = & get_instance();
+  $CI->config->load('language_conf', TRUE);
+
+  $locales_dir = $CI->config->item('locale_dir', 'language_conf');
+  $domain = $CI->config->item('domain','language_conf');  
 
   if( ! $CI->input->is_cli_request())
   {
-    $CI->config->load('language_conf', TRUE);
-
-    $locales_dir = $CI->config->item('locale_dir', 'language_conf');
-    $domain = $CI->config->item('domain','language_conf');
-
     // Try auto-detection if asked for. Set default language if it fails
     if($language === 'auto')
     {
       $CI->load->library('session');
-
       if ($CI->session->userdata('locale')) {
         $language = $CI->session->userdata('locale');
       } else {
@@ -41,13 +39,12 @@ function load_gettext($language)
         break;
       }
     }
-  }else if(!$language){
-    $language = $CI->config->item('default_locale','language_conf');
   }
+  if(!$language || ! in_array($language, $CI->config->item('available_locales','language_conf')))
+    $language = $CI->config->item('default_locale','language_conf');
 
   if ( ! $CI->input->is_cli_request() )
     $CI->session->set_userdata('locale', $language);  
-
   putenv('LANGUAGE='.$language);
   putenv('LANG='.$language);
   putenv('LC_ALL='.$language);
