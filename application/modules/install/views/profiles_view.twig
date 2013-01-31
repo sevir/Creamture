@@ -3,7 +3,7 @@
 {% block innercontent %}
 <h2>{% trans "Database configuration" %}</h2>
 <p>{% trans "Configure your different database profiles" %}</p>
-<form method="POST" id="dbprofiles">
+<form method="POST" id="dbprofiles" class="form-horizontal">
 	<p>
 		<label>{% trans "Select the default database profile" %}: 
 			<select name="active_group">
@@ -13,5 +13,47 @@
 			</select>
 		</label>
 	</p>
+	<div id="profilelist">
+		<div class="profile">
+			<h4>Profiles</h4>
+			<div class="offset2">
+				<div class="control-group"><label class="control-label">{% trans "Profile name" %}: </label><div class="controls"><input type="text" /></div></div>
+			</div>
+			<div class="row">
+				<div class="offset1 span5">
+					<div class="control-group"><label class="control-label">{% trans "Hostname" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Username" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Password" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Database" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Driver" %}: </label><div class="controls"><select>
+						<option value="cubrid">Cubrid</option>
+						<option value="ibase">Ibase</option>
+						<option value="mssql">MSSql</option>
+						<option value="mysql">MySQL</option>
+						<option value="mysqli" selected="selected">MySQLi</option>
+						<option value="oci8">Oracle</option>
+						<option value="odbc">ODBC</option>
+						<option value="pdo">PDO</option>
+						<option value="postgre">PostgreSQL</option>
+						<option value="sqlite">SQLite</option>
+						<option value="sqlite3">SQLite 3</option>
+						<option value="sqlsrv">SQLSrv</option>
+					</select></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Table prefix" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Persistent connections" %}: </label><div class="controls"><input type="text" /></div></div>
+				</div>
+				<div class="span6">				
+					<div class="control-group"><label class="control-label">{% trans "Debug mode" %}: </label><div class="controls"><input type="checkbox" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Enable query cache" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Cache folder path" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Character set" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Database Collation" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Swap prefix" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Auto initiation" %}: </label><div class="controls"><input type="text" /></div></div>
+					<div class="control-group"><label class="control-label">{% trans "Strict mode" %}: </label><div class="controls"><input type="text" /></div></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </form>
 {% endblock %}
