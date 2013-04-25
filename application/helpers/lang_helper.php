@@ -28,6 +28,7 @@ function load_gettext($language)
         $language = $CI->session->userdata('locale');
       } else {
         $language = $CI->lang->autodetect();
+        $CI->session->set_userdata('locale', $language); 
       }
     }
   }
@@ -40,19 +41,24 @@ function load_gettext($language)
       }
     }
   }
-  if(!$language || ! in_array($language, $CI->config->item('available_locales','language_conf')))
-    $language = $CI->config->item('default_locale','language_conf');
 
-  if ( ! $CI->input->is_cli_request() )
-    $CI->session->set_userdata('locale', $language);  
+  if(!$language || ! in_array($language, $CI->config->item('available_locales','language_conf'))){
+    $language = $CI->config->item('default_locale','language_conf');
+    if ( ! $CI->input->is_cli_request() )
+      $CI->session->set_userdata('locale', $language);
+  }
+
   putenv('LANGUAGE='.$language);
   putenv('LANG='.$language);
   putenv('LC_ALL='.$language);
   putenv('LC_MESSAGES='.$language);
   setlocale(LC_ALL,$language);
   setlocale(LC_CTYPE,$language);
+  //fix numeros
+  putenv('LC_NUMERIC='.'en_US');
+  setlocale(LC_NUMERIC,'en_US');  
 
-  bindtextdomain($domain,$locales_dir);
+  bindtextdomain($domain,realpath($locales_dir));
   bind_textdomain_codeset($domain, $CI->config->item('encoding','language_conf'));
   textdomain($domain);
 }

@@ -28,17 +28,6 @@ THE SOFTWARE.
 /*
  * Use:
  *
- * $.channels.open('name_of_channel');
- *
- * Opens name_of_channel channel to connecting between different elements.
- * Although one call of open is valid, by convention, you must open channel
- * in all window elements that you have before execute another method.
- *
- * $.channels.publish('name_of_channel','method' or ['method1', 'method2',...]);
- *
- * The element that triggers the channel events/methods publish the methods that others
- * can listen/bind , the publisher is the provider of the methods. You can publish
- * one method or an array of methods.
  *
  * $.channels.bind('channel', 'method' or ['method1',..], function(window, params){});
  *
@@ -69,9 +58,6 @@ THE SOFTWARE.
 	 	var manager;
 	 	var self;
 	 	var useEvents = true;
-	 	var flashcomm = false;
-	 	var flashcomm_url = "swf/comm.swf";
-	 	var flashcomm_callback = function(){ li("ERROR: set channel_ready function"); }
 
 	 	var _findManager = function(){
 	 		try{
@@ -85,34 +71,6 @@ THE SOFTWARE.
 				return manager;
 	 		}catch(e){
 	 			return false;
-	 		}
-	 	}
-
-	 	var _insertFlashComm = function() {
-	 		if (typeof(flashcomm) == "boolean" ){
-	 			var obj = '<object' + ((window.ActiveXObject)? ' id="flashcomm_obj" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="' + flashcomm_url + '"' : '');
-				obj += ' width="1"';
-				obj += ' height="1"';
-				obj += '>';
-				var param = '<param';
-				param += ' name="movie"';
-				param += ' value="' + flashcomm_url + '"';
-				param += '>';
-				param += '';
-				var params = {wmode:"transparent"}
-
-				var extraParams = '';
-				var extraAttributes = '';
-				for(var i in params){
-					extraParams += '<param name="' + i + '" value="' + params[i] + '">';
-					extraAttributes += ' ' + i + '="' + params[i] + '"';
-				}
-				var embed = '<embed id="flashcomm_obj" src="' + flashcomm_url + '" type="application/x-shockwave-flash" width="1" height="1"';
-				var embedEnd = extraAttributes + '></embed>';
-				var objEnd = '</object>';
-				$("body").append( "<div style='width:0; height:0; overflow:hidden;'>" + obj + param + extraParams + embed + embedEnd + objEnd + "</div>");
-
-				flashcomm = $("#flashcomm_obj").get(0);
 	 		}
 	 	}
 
@@ -176,178 +134,132 @@ THE SOFTWARE.
 	 	}
 
 	 	return {
-	 		config: function(d){
-				if (d.useFlashConnector){
-					flashcomm = d.useFlashConnector;
-					useEvents = false;
-				}
-				if (d.flashConnectorUrl) flashcomm_url = d.flashConnectorUrl;
-				_insertFlashComm();
-				return this;
-	 		},
-			open: function(name, w){
+			_open: function(name, w){
 				if (! w) w = window;
 
-				if (!flashcomm){
-					_findManager();
-					if(manager != window) return self.open(name,w);
+				_findManager();
+				if(manager != window) return self.open(name,w);
 
-					openedChannels = openedChannels.concat(new Array(name)).unique();
+				openedChannels = openedChannels.concat(new Array(name)).unique();
+				if(w == window)
+					return this;
+				else
+					return w.$.channels;
+
+			},
+			_publish: function(channel, method, w){
+				if (! w) w = window;
+				
+				if(manager != window) return self.publish(channel, method, w);
+
+				try{
+					if (openedChannels.indexOf(channel)<0)
+						throw err('No channel named "'+channel+'" is opened');
+
+					if (typeof (method) != "string"){
+						for (var i=0; i<method.length; i++){
+							self._publish(channel, method[i]);
+						}
+					}else{
+						if (publishedMethods[channel] && publishedMethods[channel][method] )
+							throw err('Channel "'+channel+'" has a method "'+method+'" previous');
+
+						if (!publishedMethods[channel]){
+							publishedMethods[channel] = {};
+							publishedMethods[channel][method] = [];
+						}else{
+							if(!publishedMethods[channel][method])
+								publishedMethods[channel][method] = [];
+						}
+					}
+
 					if(w == window)
 						return this;
 					else
 						return w.$.channels;
-				}else{
-					flashcomm.open(name);
-
-					return this;
-				}
-			},
-			publish: function(channel, method, w){
-				if (! w) w = window;
-
-				if(! flashcomm){
-					if(manager != window) return self.publish(channel, method, w);
-
-					try{
-						if (openedChannels.indexOf(channel)<0)
-							throw err('No channel named "'+channel+'" is opened');
-
-						if (typeof (method) != "string"){
-							for (var i=0; i<method.length; i++){
-								self.publish(channel, method[i]);
-							}
-						}else{
-							if (publishedMethods[channel] && publishedMethods[channel][method] )
-								throw err('Channel "'+channel+'" has a method "'+method+'" previous');
-
-							if (!publishedMethods[channel]){
-								publishedMethods[channel] = {};
-								publishedMethods[channel][method] = [];
-							}else{
-								if(!publishedMethods[channel][method])
-									publishedMethods[channel][method] = [];
-							}
-						}
-
-						if(w == window)
-							return this;
-						else
-							return w.$.channels;
-					}catch(e){
-						le(e.message);
-						return;
-					}
-				}else{
-					return this;
-				}
+				}catch(e){
+					le(e.message);
+					return;
+				}				
 			},
 			bind: function(channel, method, func, w){
 				if (! w) w = window;
+				_findManager();
 
-				if(! flashcomm){
-					if(manager != window) return self.bind(channel, method, func, w);
-					w.$.channels._addlistener(channel, method, func);
+				if(manager != window) return self.bind(channel, method, func, w);
+				w.$.channels._addlistener(channel, method, func);
 
-					try{
-						if (openedChannels.indexOf(channel)<0)
-								throw err('No channel named "'+channel+'" is opened');
+				try{
+					if (openedChannels.indexOf(channel)<0)
+							self._open(channel, w);
 
-						if (typeof (method) != "string"){
-							for (var i=0; i<method.length; i++){
-								self.bind(channel, method[i], func, w);
-							}
-						}else{
-							if ( ! publishedMethods[channel] || ! publishedMethods[channel][method])
-								throw err('Channel "'+channel+'" has not a method "'+method+'"');
-
-							publishedMethods[channel][method].push(w);
-							publishedMethods[channel][method] = publishedMethods[channel][method].unique();
+					if (typeof (method) != "string"){
+						for (var i=0; i<method.length; i++){
+							self.bind(channel, method[i], func, w);
 						}
+					}else{
+						if ( ! publishedMethods[channel] || ! publishedMethods[channel][method])
+							self._publish(channel, method, w);
 
-						if(w == window)
-							return this;
-						else
-							return w.$.channels;
-					}catch(e){
-						le(e.message);
-					}
-				}else{
-					flashcomm.bind(channel, method);
-					$.channels._addlistener(channel, method, func);
-
-					return this;
-				}
-			},
-			unbind: function(channel, method, w){
-				if (! w) w = window;
-
-				if(! flashcomm){
-					if(w == window){
-						if(!useEvents){
-							if (listeners[channel] & listeners[channel][method])
-								listeners[channel][method] = [];
-						}else
-							w.$(w).unbind(channel+'_ch_'+method);
+						publishedMethods[channel][method].push(w);
+						publishedMethods[channel][method] = publishedMethods[channel][method].unique();
 					}
 
-					if(manager != window) return self.unbind(channel, method, w);
-					try{
-						if (openedChannels.indexOf(channel)<0)
-							throw err('No channel named "'+channel+'" is opened');
-						if (publishedMethods[channel] && publishedMethods[channel][method])
-							publishedMethods[channel][method].splice(publishedMethods[channel][method].indexOf(w),1);
-
-						if(w == window)
-							return this;
-						else
-							return w.$.channels;
-					}catch(e){
-						le(e.message);
-					}
-				}else{
-					flashcomm.unbind(channel, method);
-					if (listeners[channel] & listeners[channel][method])
-								listeners[channel][method] = [];
-
-					return this;
-				}
-			},
-			trigger: function(channel, method, params, w){
-				if (! w) w = window;
-				if(! flashcomm){
-					if(manager != window) return self.trigger(channel, method, params, w);
-
-					if (publishedMethods[channel] && publishedMethods[channel][method]){
-						for (var i=0; i< publishedMethods[channel][method].length; i++){
-							if(useEvents)
-								publishedMethods[channel][method][i].$(publishedMethods[channel][method][i]).trigger(channel+'_ch_'+method, params);
-							else
-								publishedMethods[channel][method][i].$.channels._execute(channel, method, params);
-						}
-					}
 					if(w == window)
 						return this;
 					else
 						return w.$.channels;
-				}else{
-					if (typeof (method) != "string"){
-						for (var i=0; i<method.length; i++){
-							flashcomm.trigger(channel, method[i], params);
-						}
-					}else{
-						flashcomm.trigger(channel, method, params);
-					}
+				}catch(e){
+					le(e.message);
+				}				
+			},
+			unbind: function(channel, method, w){
+				if (! w) w = window;
+				_findManager();
 
-					return this;
+				if(w == window){
+					if(!useEvents){
+						if (listeners[channel] & listeners[channel][method])
+							listeners[channel][method] = [];
+					}else
+						w.$(w).unbind(channel+'_ch_'+method);
 				}
+
+				if(manager != window) return self.unbind(channel, method, w);
+				try{
+					if (openedChannels.indexOf(channel)<0)
+						throw err('No channel named "'+channel+'" is opened');
+					if (publishedMethods[channel] && publishedMethods[channel][method])
+						publishedMethods[channel][method].splice(publishedMethods[channel][method].indexOf(w),1);
+
+					if(w == window)
+						return this;
+					else
+						return w.$.channels;
+				}catch(e){
+					le(e.message);
+				}
+
 			},
-			flashcomm_started: function(){
-				flashcomm_callback();
-			},
-			channels_ready: function(f){
-				flashcomm_callback = f;
-				return this;
+			trigger: function(channel, method, params, w){
+				if (! w) w = window;
+				_findManager();
+
+				if(manager != window) return self.trigger(channel, method, params, w);
+
+				if (publishedMethods[channel] && publishedMethods[channel][method]){
+					for (var i=0; i< publishedMethods[channel][method].length; i++){
+						if(useEvents)
+							publishedMethods[channel][method][i].$(publishedMethods[channel][method][i]).trigger(channel+'_ch_'+method, params);
+						else
+							publishedMethods[channel][method][i].$.channels._execute(channel, method, params);
+					}
+				}
+				if(w == window)
+					return this;
+				else
+					return w.$.channels;
+
 			},
 			_addlistener: function(channel, method, func){
 				if (typeof (method) != "string"){
