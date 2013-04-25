@@ -2,10 +2,10 @@
 
 $config['domain'] = 'creamture';
 $config['default_locale'] = 'en_US';
-$config['available_locales'] = array('en_US','es_ES');
-$config['locale_folders'] = array('en','es');
+$config['available_locales'] = array('en_US');
+$config['locale_folders'] = array('en');
 $config['language_aliases'] = array(
-	'es_ES'=>array('es','es_','es-')
+	'en_US'=>array('en','en_','en-')
 );
 $config['locale_dir'] = APPPATH.'../i18n/locales/';
 $config['encoding'] = 'UTF-8';
