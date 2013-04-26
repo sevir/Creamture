@@ -3,7 +3,7 @@
 $config['domain'] = 'creamture';
 $config['default_locale'] = 'en_US';
 $config['available_locales'] = array('en_US');
-$config['locale_folders'] = array('en');
+$config['locale_folders'] = array('en_US');
 $config['language_aliases'] = array(
 	'en_US'=>array('en','en_','en-')
 );

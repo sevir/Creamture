@@ -2,12 +2,12 @@
 
 /* Functions definition */
 $creamator['GetText Commands'] = array(
-	'generateGettext' => array(
-		'description'=>'Generate all GetText files from PHP files of the proyect',
-		'usage' => 'creamator generateGettext <directory>',
-		'parameters' => array('directory must be a path of the CI project'),
-		'num_parameters' => 1
-	),
+    'generateGettext' => array(
+        'description'=>'Generate all GetText files from PHP files of the proyect',
+        'usage' => 'creamator generateGettext <directory>',
+        'parameters' => array('directory must be a path of the CI project'),
+        'num_parameters' => 1
+    ),
     'compileGettext' => array(
         'description'=>'Compile mo files',
         'usage' => 'creamator compileGettext',
@@ -25,13 +25,15 @@ $creamator['GetText Commands'] = array(
  */
 function generateTwigGettext()
 {
-    $CI = & get_instance();
-    $CI->config->load('language');
 
-    $tmpDir = $CI->config->item('twig_tmp_locale_dir');
+    $CI = & get_instance();
+    $CI->config->load('language_conf', TRUE);
+
+    $tmpDir = $CI->config->item('twig_tmp_locale_dir', 'language_conf');
     $tplDirs = array(
-        APPPATH.'views'
+        APPPATH.'twig'.DIRECTORY_SEPARATOR.'views'
     );
+
 
     // fetch modules' view path too
     $handle = opendir(APPPATH.'modules');
@@ -49,11 +51,9 @@ function generateTwigGettext()
             }
         }
     }
-
     // load Twig
     require_once APPPATH.'../sparks/twiggy/0.8.5/vendor/Twig/lib/Twig/Autoloader.php';
     Twig_Autoloader::register();
-
     foreach($tplDirs as $tplDir)
     {
         $loader = new Twig_Loader_Filesystem($tplDir);
@@ -61,6 +61,7 @@ function generateTwigGettext()
             'cache' => $tmpDir,
             'auto_reload' => TRUE
         ));
+
 
         // add extensions
         $twig->addExtension(new Twig_Extensions_Extension_I18n());
@@ -74,10 +75,16 @@ function generateTwigGettext()
         $twig->addFunction('assets_js_group', new Twig_Function_Function('assets_js_group'));
         $twig->addFunction('assets_img', new Twig_Function_Function('assets_img'));
         $twig->addFunction('getActualSection', new Twig_Function_Function('getActualSection'));
+        
+        /*  ************************************* */
+        // insert here all useful functions for your project
 
+        /*  ************************************* */
+        
         // iterate over all your templates
-        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tplDir), RecursiveIteratorIterator::LEAVES_ONLY) as $file)
-        {
+
+        foreach (directoryToArray($tplDir) as $file) {
+            println( "$file" );
             // force compilation
             if(preg_match('/\.twig$/', $file)) {
                 $twig->loadTemplate(str_replace($tplDir.'/', '', $file));
@@ -85,23 +92,23 @@ function generateTwigGettext()
         }
     }
 
-    println('Twig preprocessed files generated in: '.$CI->config->item('twig_tmp_locale_dir').' folder');
+    println('Twig preprocessed files generated in: '.$tmpDir.' folder');
 }
 
 function generateGettext($directory){
     $CI = & get_instance();
-    $CI->config->load('language');
+    $CI->config->load('language_conf');
 
     $language = $CI->config->item('default_locale');
 
     println('Generating php file list');
 
     $path_tmp_files = $CI->config->item('locale_dir').'../';
-	$result = directoryToArray($directory, true, false, true, '/cache|logs/', '/.*(\/|\\\\)(application|i18n)((\/|\\\\)).*php/');
+    $result = directoryToArray($directory, true, false, true, '/cache|logs/', '/.*(\/|\\\\)(application|i18n)((\/|\\\\)).*php/');
 
-	$CI->load->helper('file');
+    $CI->load->helper('file');
 
-	write_file($path_tmp_files.'/phpfiles.txt', implode("\n", $result));
+    write_file($path_tmp_files.'/phpfiles.txt', implode("\n", $result));
 
     println('Generated php list file in '.$path_tmp_files.' folder'); 
 
@@ -128,7 +135,7 @@ function generateGettext($directory){
 
     println('Initial POT file in '.$path_tmp_files.' folder');
 
-    $lang_folders = $CI->config->item('available_locales');
+    $lang_folders = $CI->config->item('locale_folders');
     $last_po_files = directoryToArray($CI->config->item('locale_dir'), true, true, true, '', '/\.po/');
 
     foreach ($lang_folders as $lang_folder) {
@@ -162,14 +169,14 @@ function generateGettext($directory){
     //if origin lang is different to english copy english translation
     if ( preg_match('/en/', $language) == false){
 
-    	$english_base = substr_in_array($lang_folders, 'en_'); $english_base = array_pop($english_base);
+        $english_base = substr_in_array($lang_folders, 'en_'); $english_base = array_pop($english_base);
 
-    	$english_po = file_get_contents(
+        $english_po = file_get_contents(
             $CI->config->item('locale_dir').$english_base.'/LC_MESSAGES/'.$CI->config->item('domain').'.po'
             );
-		$english_po = str_replace('English', 'Spanish', $english_po);
-		$english_po = str_replace('en_UK', 'es', $english_po);
-		write_file(
+        $english_po = str_replace('English', 'Spanish', $english_po);
+        $english_po = str_replace('en_UK', 'es', $english_po);
+        write_file(
             $CI->config->item('locale_dir').$language.'/LC_MESSAGES/'.$CI->config->item('domain').'.po',
             $english_po
         );
@@ -202,7 +209,7 @@ function compileGettext(){
     $CI = & get_instance();
     $CI->config->load('language');
 
-    $lang_folders = $CI->config->item('available_locales');
+    $lang_folders = $CI->config->item('locale_folders');
     $last_po_files = directoryToArray($CI->config->item('locale_dir'), true, true, true, '', '/\.po/');
 
     foreach ($lang_folders as $lang_folder) {
@@ -247,7 +254,7 @@ function directoryToArray($directory, $recursive = true, $listDirs = false, $lis
             preg_match($exclude, $directory . DIRECTORY_SEPARATOR . $file, $skipByExclude);
         }
         if($include){
-        	preg_match($include, $directory . DIRECTORY_SEPARATOR . $file, $forceByInclude);
+            preg_match($include, $directory . DIRECTORY_SEPARATOR . $file, $forceByInclude);
         }
         if (!$skip && !$skipByExclude) {
             if (is_dir($directory. DIRECTORY_SEPARATOR . $file)) {

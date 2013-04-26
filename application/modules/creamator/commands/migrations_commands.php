@@ -2,12 +2,12 @@
 
 /* Functions definition */
 $creamator['Migrations Commands'] = array(
-	'createMigration' => array(
-		'description'=>_('Create an empty migration file'),
-		'usage' => _('creamator createMigration <desc> <environment>'),
+    'createMigration' => array(
+        'description'=>_('Create an empty migration file'),
+        'usage' => _('creamator createMigration <desc> <environment>'),
         'parameters'=> array(_('file description'),_('optional, the environment')),
-		'num_parameters' => 1
-	),
+        'num_parameters' => 1
+    ),
     'loadMigrations' => array(
         'description'=>_('load all available migrations'),
         'usage' => _('creamator loadMigrations'),
