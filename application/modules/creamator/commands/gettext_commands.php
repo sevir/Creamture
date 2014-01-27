@@ -87,7 +87,7 @@ function generateTwigGettext()
             println( "$file" );
             // force compilation
             if(preg_match('/\.twig$/', $file)) {
-                $twig->loadTemplate(str_replace($tplDir.'/', '', $file));
+                $twig->loadTemplate(str_replace($tplDir.DIRECTORY_SEPARATOR, '', $file));
             }
         }
     }
