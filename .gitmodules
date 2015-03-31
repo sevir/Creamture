@@ -1,0 +1,3 @@
+[submodule "docs/creamture"]
+	path = docs/creamture
+	url = git@github.com:sevir/creamture-docs.git
