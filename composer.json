@@ -1,0 +1,67 @@
+{
+    "name": "digio/creamture",
+    "description": "Creamture Framework, based in Codeigniter but with a rich features for fast development in big projects",
+    "license": "MIT",
+    "keywords":["Codeigniter","Twig","Composer","Bower","Paris","orm"],
+    "authors": [
+        {
+            "name": "Jose Francisco Rives Lirola",
+            "email": "jose@digio.es"
+        }
+    ],
+    "type":"project",
+    "repositories":[
+        {
+            "type":"package",
+            "package":{
+                "name":"elislab/codeigniter",
+                "description":"Codeigniter 2.2.x stable branch",
+                "version":"2.2-stable",
+                "source":{
+                    "url":"https://github.com/bcit-ci/CodeIgniter.git",
+                    "type":"git",
+                    "reference":"2.2-stable"
+                }
+            }
+        },
+         {
+            "type":"package",
+            "package":{
+                "name":"mediovskitechnology/php-crontab-manager",
+                "description":"PHP Crontab Manager",
+                "version":"dev-master",
+                "autoload": {
+                    "classmap": [ "src/"  ]
+                },
+                "source":{
+                    "url":"https://github.com/MediovskiTechnology/php-crontab-manager.git",
+                    "type":"git",
+                    "reference":"master"
+                }
+            }
+        }
+    ],
+    "config": {
+        "bin-dir": "tools"
+    },
+    "require": {
+        "elislab/codeigniter":"2.2-stable",
+        "joseph-lenton/php-error": "dev-master",
+        "xiidea/ci-base-model": "2.1.*",
+        "twig/twig":"1.18.0",
+        "twig/extensions":"~1.1.0",
+        "j4mie/paris":"v1.5.4",
+        "phpfastcache/phpfastcache": "3.0.3",
+        "phpmailer/phpmailer": "v5.2.9",
+        "mediovskitechnology/php-crontab-manager":"dev-master"
+    },
+    "require-dev":{
+        "justinwalsh/daux.io": "dev-master",
+        "codeception/codeception":"*"
+    },
+    "scripts":{
+        "post-install-cmd":"php tools/composer-post-install.php",
+        "post-update-cmd":"php tools/composer-post-update.php",
+        "post-create-project-cmd":"php tools/composer-post-install.php"
+    }
+}

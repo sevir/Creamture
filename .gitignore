@@ -1,0 +1,15 @@
+.DS_Store
+.project
+.settings
+composer.lock
+application/cache/*
+application/cache/twig/*
+application/logs/*
+i18n/twig_tmp/*
+public/assets/cache/*
+public/assets/vendor/*
+public/docs/*
+tests/_output/*
+vendor/*
+codeception.yml
+npm-debug.log

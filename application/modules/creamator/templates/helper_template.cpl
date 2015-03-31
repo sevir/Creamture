@@ -1,0 +1,7 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+function smple(){
+	echo 'Hello World';
+}
+
+/* eof %FILE_PATH% */

@@ -1,0 +1,23 @@
+{
+  "name": "Creamture",
+  "version": "2.0.0",
+  "authors": [
+    "Jose Francisco Rives Lirola <jose@digio.es>"
+  ],
+  "description": "Creamture PHP Framework",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "v1.11.0",
+    "bootstrap": "v3.3.2",
+    "modernizr": "~2.8.3",
+    "plupload": "~2.1.2"
+  }
+}

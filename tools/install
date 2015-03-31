@@ -1,0 +1,38 @@
+#!/usr/bin/env php
+<?php
+
+function is_win(){
+	return (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+}
+
+echo PHP_EOL;
+echo 'Checking Composer...'.PHP_EOL;
+
+if(!file_exists(__DIR__.'/../vendor')){
+	mkdir(__DIR__.'/../vendor');
+}
+if(!file_exists(__DIR__.'/../public/assets/vendor')){
+	mkdir(__DIR__.'/../public/assets/vendor');
+}
+
+try{
+	//check composer requirement
+	if (! file_exists(__DIR__.'/../vendor/composer.phar')){
+		echo shell_exec('php -r "readfile(\'https://getcomposer.org/installer\');" | php -- --install-dir='.__DIR__.'/../vendor');
+	}
+	echo 'Execute php vendor/composer.phar update when you want update dependencies'.PHP_EOL;
+}catch(Exception $e){
+	die('Error downloading Composer'.PHP_EOL);
+}
+
+flush();
+echo PHP_EOL;
+echo 'Installing Composer dependencies...'.PHP_EOL;
+
+try{
+	echo shell_exec('php vendor/composer.phar install');
+}catch(Exception $e){
+	die('Error installing composer dependencies');
+}
+
+flush();
