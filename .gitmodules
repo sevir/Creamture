@@ -1,3 +1,6 @@
 [submodule "docs/creamture"]
 	path = docs/creamture
 	url = git@github.com:sevir/creamture-docs.git
+[submodule "tests"]
+	path = tests
+	url = git@github.com:sevir/creamture-tests.git
